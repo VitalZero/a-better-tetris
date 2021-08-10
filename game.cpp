@@ -8,6 +8,9 @@ Game::Game(int x, int y, const std::string& title)
 {
 	InitWindow(x, y, title.c_str());
 	SetTargetFPS(60);
+
+	target = LoadRenderTexture(GetScreenWidth(), GetScreenHeight());
+	shader = LoadShader(0, TextFormat("bloom.fs", 330));
 }
 
 void Game::Run()
@@ -15,12 +18,20 @@ void Game::Run()
 	while(!WindowShouldClose())
 	{
 		Update();
+		
+		BeginTextureMode(target);
+		ClearBackground(Fade(BLACK, 0.0f));
+			mainPiece.DrawG();
+		EndTextureMode();
+
 		BeginDrawing();
 		ClearBackground(BLACK);
 		Draw();
 		EndDrawing();
 	}
 
+	UnloadRenderTexture(target); 
+	UnloadShader(shader);
 	CloseWindow();
 }
 
@@ -64,6 +75,9 @@ void Game::Update()
 void Game::Draw()
 {
 	board.Draw();
+	BeginShaderMode(shader);
+	DrawTextureRec(target.texture, {0, 0, (float)target.texture.width, (float)-target.texture.height }, {0, 0}, WHITE);
+	EndShaderMode();
 	mainPiece.Draw();
 	//nextPiece.Draw();
 

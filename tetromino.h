@@ -18,6 +18,7 @@ public:
 	Tetromino(const Location& loc, int size, Board& brd);
 	Tetromino(int x, int y, int size, Board& board);
 	void Draw();
+	void DrawG();
 	void Reset();
 	void Rotate();
 	void MoveBy(const Location& in_loc);

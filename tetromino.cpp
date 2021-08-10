@@ -21,6 +21,21 @@ void Tetromino::Draw()
 {
 	Location brdLoc = board.GetLocation();
 
+	for(const auto& f : figure)
+	{
+		int x1 = f.x + loc.x + brdLoc.x;
+		int y1 = f.y + loc.y + brdLoc.y;
+
+		//DrawRectangleLines(x1 * size + 1, (yOffset + y1) * size + 1, size - 1, size - 1, RED);
+		DrawRectangle(x1 * size + 1, y1 * size + 1, size - 1, size - 1, color);
+	}
+
+}
+
+void Tetromino::DrawG()
+{
+	Location brdLoc = board.GetLocation();
+
 	int yOffset = DrawGhost();
 
 	for(const auto& f : figure)
@@ -28,8 +43,7 @@ void Tetromino::Draw()
 		int x1 = f.x + loc.x + brdLoc.x;
 		int y1 = f.y + loc.y + brdLoc.y;
 
-		DrawRectangle(x1 * size + 1, y1 * size + 1, size - 1, size - 1, color);
-		DrawRectangleLines(x1 * size + 1, (yOffset + y1) * size + 1, size - 1, size - 1, RED);
+		DrawRectangleLinesEx({(float)x1 * size + 1, (float)(yOffset + y1) * size + 1, (float)size - 1, (float)size - 1}, 3, RED);
 	}
 
 }
@@ -131,34 +145,27 @@ void Tetromino::PutPieceOnBoard()
 	}
 
 	board.CheckAndDeleteLines();
-
-	// if(board.CheckFilledLines())
-	// {
-	// 	board.DeleteMarkedLines();
-	// }
 }
 
 int Tetromino::DrawGhost()
 {
 	int yOffset = board.tileHeight - 1;
 
-	auto sizz = figure.size();
-
-	for(const auto& f : figure)
+	for(int yStart = loc.y; yStart < board.tileHeight - 1; ++yStart)
 	{
-		int yCheck = f.y + this->loc.y;
-		int x = f.x + this->loc.x;
-
-		while(yCheck < board.tileHeight)
+		for(const auto& f : figure)
 		{
-		 	if(board.TileAt(x, yCheck) >= 0)
-		 		break;
+			if(board.TileAt(f.x + loc.x, f.y + yStart) >= 0)
+			{
+				return yStart - loc.y - 1;
+			}
 
-			++yCheck;
+			if((f.y + yStart) >= board.tileHeight - 1)
+			{
+				return yStart - loc.y;
+			}
 		}
-
-		yOffset = std::min(yOffset, yCheck);
 	}
 
-	return yOffset;
+	return 1;
 }
