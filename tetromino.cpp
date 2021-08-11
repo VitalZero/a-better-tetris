@@ -43,7 +43,7 @@ void Tetromino::DrawG()
 		int x1 = f.x + loc.x + brdLoc.x;
 		int y1 = f.y + loc.y + brdLoc.y;
 
-		DrawRectangleLinesEx({(float)x1 * size + 1, (float)(yOffset + y1) * size + 1, (float)size - 1, (float)size - 1}, 3, RED);
+		DrawRectangleLinesEx({(float)x1 * size + 1, (float)(yOffset + y1) * size + 1, (float)size - 1, (float)size - 1}, 2, SKYBLUE);
 	}
 
 }
@@ -151,21 +151,21 @@ int Tetromino::DrawGhost()
 {
 	int yOffset = board.tileHeight - 1;
 
-	for(int yStart = loc.y; yStart < board.tileHeight - 1; ++yStart)
+	for(int yStart = loc.y; yStart < board.tileHeight; ++yStart)
 	{
 		for(const auto& f : figure)
 		{
-			if(board.TileAt(f.x + loc.x, f.y + yStart) >= 0)
+
+			if((f.y + yStart) >= board.tileHeight)
 			{
 				return yStart - loc.y - 1;
 			}
-
-			if((f.y + yStart) >= board.tileHeight - 1)
+			else if(board.TileAt(f.x + loc.x, f.y + yStart) >= 0)
 			{
-				return yStart - loc.y;
+				return yStart - loc.y - 1;
 			}
 		}
 	}
 
-	return 1;
+	return board.tileHeight - 1 - loc.y;
 }
