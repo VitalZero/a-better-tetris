@@ -43,7 +43,7 @@ void Tetromino::DrawG()
 		int x1 = f.x + loc.x + brdLoc.x;
 		int y1 = f.y + loc.y + brdLoc.y;
 
-		DrawRectangleLinesEx({(float)x1 * size + 1, (float)(yOffset + y1) * size + 1, (float)size - 1, (float)size - 1}, 2, SKYBLUE);
+		DrawRectangleLinesEx({(float)x1 * size + 1, (float)(yOffset + y1) * size + 1, (float)size - 1, (float)size - 1}, 1, MAROON);
 	}
 
 }

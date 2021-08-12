@@ -27,7 +27,7 @@ public:
 	};
 	enum class BlockType { ToDelete = -2, Empty = -1 };
 
-private:
+public:
 	void DrawBorders();
 
 private:

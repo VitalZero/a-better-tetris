@@ -21,6 +21,7 @@ void Game::Run()
 		
 		BeginTextureMode(target);
 		ClearBackground(Fade(BLACK, 0.0f));
+			board.Draw();
 			mainPiece.DrawG();
 		EndTextureMode();
 
@@ -74,7 +75,7 @@ void Game::Update()
 
 void Game::Draw()
 {
-	board.Draw();
+	board.DrawBorders();
 
 	BeginShaderMode(shader);
 	DrawTextureRec(target.texture, {0, 0, (float)target.texture.width, (float)-target.texture.height }, {0, 0}, WHITE);

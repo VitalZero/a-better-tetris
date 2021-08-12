@@ -16,7 +16,7 @@ Board::Board(const Location& loc, int size)
 
 void Board::Draw()
 {
-	DrawBorders();
+	//DrawBorders();
 	
 	for(int y = 0; y < tileHeight; ++y)
 	{
@@ -30,17 +30,19 @@ void Board::Draw()
 			int tileValue = TileAt(x, y);
 			assert(tileValue < 5);
 
-			if(tileValue == (int)BlockType::Empty)
+			// if(tileValue == (int)BlockType::Empty)
+			// {
+			// 	DrawRectangle(x1, y1, size, size, {30, 30, 30, 255});
+			// }
+			// else if(tileValue == (int)BlockType::ToDelete)
+			// {
+			// 	DrawRectangle(x1, y1, size, size, DARKBROWN);
+			// }
+			//else
+			if(tileValue > (int)BlockType::Empty)
 			{
-				DrawRectangle(x1, y1, size, size, {30, 30, 30, 255});
-			}
-			else if(tileValue == (int)BlockType::ToDelete)
-			{
-				DrawRectangle(x1, y1, size, size, DARKBROWN);
-			}
-			else
-			{
-				DrawRectangle(x1, y1, size, size, TetrominoColors[tileValue]);
+				//DrawRectangle(x1, y1, size, size, TetrominoColors[tileValue]);
+				DrawRectangleLinesEx({(float)x1, (float)y1, (float)size, (float)size}, 1, DARKBLUE);
 			}
 		}
 	}
@@ -75,7 +77,7 @@ void Board::CheckAndDeleteLines()
 {
 	int y1 = tileHeight - 1;
 
-	for(int y = tileHeight - 1; y > 0; --y)
+	for(int y = y1; y > 0; --y)
 	{
 		int xCount = 0;
 
@@ -96,7 +98,6 @@ void Board::DrawBorders()
 {
 	int x1 = (loc.x - 1) * tileSize;
 	int y1 = loc.y * tileSize;
-
 	DrawRectangle(x1, y1, tileSize, tileHeight * tileSize, DARKBROWN);//{250, 252, 251, 255}); // left border
 	DrawRectangle(x1 + tileSize + (tileWidth * tileSize) + 1, y1, tileSize + 1, tileHeight * tileSize, DARKBROWN);//{250, 252, 251, 255}); // right border
 	DrawRectangle(x1, y1 + tileHeight * tileSize, (tileWidth * tileSize) + (tileSize * 2) + 2, tileSize, DARKBROWN);//{250, 252, 251, 255}); // bottom border
