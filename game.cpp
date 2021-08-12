@@ -58,7 +58,7 @@ void Game::Update()
 		mainPiece.Rotate();
 	}
 
-	if(IsKeyDown(KEY_DOWN))
+	if(IsKeyDown(KEY_DOWN) && (mainPiece.GetLocation().y > 0))
 		moveCounter += 40;
 	else
 		++moveCounter;

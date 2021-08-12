@@ -22,6 +22,7 @@ public:
 	void Reset();
 	void Rotate();
 	void MoveBy(const Location& in_loc);
+	Location GetLocation() const { return loc; }
 
 private:
 	void RotateRight();
@@ -31,6 +32,7 @@ private:
 	int DrawGhost();
 
 private:
+	enum class MinoType { None = -1, S, T, O, L, J, Z, I };
 	Location loc;
 	const Location initialLoc;
 	int size;
@@ -39,6 +41,7 @@ private:
 	std::vector<Block> figure;
 	Board& board;
 	std::mt19937 rng{std::random_device()()};
+	MinoType minoType = MinoType::None; 
 
 	static constexpr Block figuresList[7][4]= 
 	{

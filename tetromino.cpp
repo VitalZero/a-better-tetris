@@ -63,6 +63,8 @@ void Tetromino::Reset()
 
 	int figureIndex = figureDst(rng);
 
+	minoType = (MinoType)figureIndex;
+
 	for(int i = 0; i < 4; ++i)
 	{
 		figure.emplace_back(figuresList[figureIndex][i]);
@@ -71,10 +73,13 @@ void Tetromino::Reset()
 
 void Tetromino::Rotate()
 {
-	RotateRight();
+	if(minoType != MinoType::O)
+	{
+		RotateRight();
 
-	if(!CanMove())
-		RotateLeft();
+		if(!CanMove())
+			RotateLeft();
+	}
 }
 
 void Tetromino::MoveBy(const Location& offset_loc)
