@@ -3,6 +3,7 @@
 #include "board.h"
 #include "tetromino.h"
 #include "location.h"
+#include <raylib.h>
 
 class Game
 {
@@ -23,4 +24,8 @@ private:
 	int moveCounter = 0;
 	Shader shader;
 	RenderTexture2D target;
+	Music bgm;
+	Sound moveSound;
+	Sound rotateSound;
+	Sound lockSound;
 };

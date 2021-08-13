@@ -1,6 +1,5 @@
 #pragma once
 #include "game.h"
-#include <raylib.h>
 
 Game::Game(int x, int y, const std::string& title)
 	:
@@ -11,18 +10,32 @@ Game::Game(int x, int y, const std::string& title)
 
 	target = LoadRenderTexture(GetScreenWidth(), GetScreenHeight());
 	shader = LoadShader(0, TextFormat("bloom.fs", 330));
+	bgm = LoadMusicStream("resources/tetrisbgm.mp3");
+	moveSound = LoadSound("resources/move.wav");
+	lockSound = LoadSound("resources/lock.wav");
+	rotateSound = LoadSound("resources/rotate.wav");
+	SetSoundVolume(moveSound, 0.3f);
+	SetSoundVolume(rotateSound, 0.3f);
+	SetSoundVolume(lockSound, 0.3f);
+
+	SetMusicVolume(bgm, 0.2f);
+	PlayMusicStream(bgm);
 }
 
 void Game::Run()
 {
 	while(!WindowShouldClose())
 	{
+		UpdateMusicStream(bgm);
+		
 		Update();
 		
 		BeginTextureMode(target);
 		ClearBackground(Fade(BLACK, 0.0f));
+			//board.DrawBorders();
 			board.Draw();
 			mainPiece.DrawG();
+			mainPiece.Draw();
 		EndTextureMode();
 
 		BeginDrawing();
@@ -33,6 +46,10 @@ void Game::Run()
 
 	UnloadRenderTexture(target); 
 	UnloadShader(shader);
+	UnloadMusicStream(bgm);
+	UnloadSound(moveSound);
+	UnloadSound(lockSound);
+	UnloadSound(rotateSound);
 	CloseWindow();
 }
 
@@ -48,15 +65,18 @@ void Game::Update()
 	if(IsKeyPressed(KEY_RIGHT))
 	{
 		offset = {1, 0};
+		PlaySound(moveSound);
 	}
 	else if(IsKeyPressed(KEY_LEFT))
 	{
 		offset = {-1, 0};
+		PlaySound(moveSound);
 	}
 	
 	if(IsKeyPressed(KEY_UP))
 	{
-		mainPiece.Rotate();
+		if(mainPiece.Rotate())
+			PlaySound(rotateSound);
 	}
 
 	if(IsKeyDown(KEY_DOWN) && (mainPiece.GetLocation().y > 0))
@@ -70,7 +90,9 @@ void Game::Update()
 		offset.y = 1;
 	}
 
-	mainPiece.MoveBy(offset);
+	if(mainPiece.MoveBy(offset))
+		PlaySound(lockSound);
+
 }
 
 void Game::Draw()
@@ -78,11 +100,13 @@ void Game::Draw()
 	board.DrawBorders();
 
 	BeginShaderMode(shader);
-	DrawTextureRec(target.texture, {0, 0, (float)target.texture.width, (float)-target.texture.height }, {0, 0}, WHITE);
+	DrawTextureRec(target.texture, {0, 0, (float)target.texture.width, (float)-target.texture.height }, {0, 0}, Fade(WHITE, 0.0));
 	EndShaderMode();
 	
-	mainPiece.Draw();
+	
+	//mainPiece.Draw();
 	//nextPiece.Draw();
 
 	DrawFPS(GetScreenWidth() - 80, 20);
+	DrawText("VitalZero's Petris - VZ Studio 2021.", 10, GetScreenHeight() - 30, 20, RAYWHITE);
 }

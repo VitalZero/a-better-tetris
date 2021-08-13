@@ -98,7 +98,7 @@ void Board::DrawBorders()
 {
 	int x1 = (loc.x - 1) * tileSize;
 	int y1 = loc.y * tileSize;
-	DrawRectangle(x1, y1, tileSize, tileHeight * tileSize, DARKBROWN);//{250, 252, 251, 255}); // left border
-	DrawRectangle(x1 + tileSize + (tileWidth * tileSize) + 1, y1, tileSize + 1, tileHeight * tileSize, DARKBROWN);//{250, 252, 251, 255}); // right border
-	DrawRectangle(x1, y1 + tileHeight * tileSize, (tileWidth * tileSize) + (tileSize * 2) + 2, tileSize, DARKBROWN);//{250, 252, 251, 255}); // bottom border
+	DrawRectangleLines(x1, y1, tileSize, tileHeight * tileSize, BLUE);//{250, 252, 251, 255}); // left border
+	DrawRectangleLines(x1 + tileSize + (tileWidth * tileSize) + 1, y1, tileSize + 1, tileHeight * tileSize, BLUE);//{250, 252, 251, 255}); // right border
+	DrawRectangleLines(x1, y1 + tileHeight * tileSize, (tileWidth * tileSize) + (tileSize * 2) + 2, tileSize, BLUE);//{250, 252, 251, 255}); // bottom border
 }

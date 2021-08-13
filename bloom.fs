@@ -6,7 +6,7 @@ in vec2 fragTexCoord;
 in vec4 fragColor;
 
 // Input uniform values
-uniform sampler2D texture0;
+uniform sampler2D texture0; 
 uniform vec4 colDiffuse;
 
 // Output fragment color
@@ -15,8 +15,8 @@ out vec4 finalColor;
 // NOTE: Add here your custom variables
 
 const vec2 size = vec2(300, 400);   // render size
-const float samples = 2.5;         // pixels per axis; higher = bigger glow, worse performance
-const float quality = .45;             // lower = smaller glow, better quality
+const float samples = 2.3;         // pixels per axis; higher = bigger glow, worse performance
+const float quality = .41;             // lower = smaller glow, better quality
 
 void main()
 {
@@ -28,9 +28,9 @@ void main()
 
     const int range = 2;            // should be = (samples - 1)/2;
 
-    for (int x = -range; x <= range; x++)
+    for (int x = -range; x < range; x++)
     {
-        for (int y = -range; y <= range; y++)
+        for (int y = -range; y < range; y++)
         {
             sum += texture(texture0, fragTexCoord + vec2(x, y)*sizeFactor);
         }

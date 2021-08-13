@@ -27,7 +27,8 @@ void Tetromino::Draw()
 		int y1 = f.y + loc.y + brdLoc.y;
 
 		//DrawRectangleLines(x1 * size + 1, (yOffset + y1) * size + 1, size - 1, size - 1, RED);
-		DrawRectangle(x1 * size + 1, y1 * size + 1, size - 1, size - 1, color);
+		//DrawRectangle(x1 * size + 1, y1 * size + 1, size - 1, size - 1, color);
+		DrawRectangleLines(x1 * size + 1, y1 * size + 1, size - 1, size - 1, LIME);
 	}
 
 }
@@ -50,6 +51,7 @@ void Tetromino::DrawG()
 
 void Tetromino::Reset()
 {
+	lockPiece = false;
 	figure.clear();
 
 	loc = initialLoc;
@@ -71,18 +73,25 @@ void Tetromino::Reset()
 	}
 }
 
-void Tetromino::Rotate()
+bool Tetromino::Rotate()
 {
 	if(minoType != MinoType::O)
 	{
 		RotateRight();
 
 		if(!CanMove())
+		{
 			RotateLeft();
+			return false;
+		}
+
+		return true;
 	}
+
+	return false;
 }
 
-void Tetromino::MoveBy(const Location& offset_loc)
+bool Tetromino::MoveBy(const Location& offset_loc)
 {
 	assert(offset_loc.x >= -1 && offset_loc.x <= 1);
 	assert(offset_loc.y >= -1 && offset_loc.y <= 1);
@@ -98,12 +107,15 @@ void Tetromino::MoveBy(const Location& offset_loc)
 			loc = tmp;
 			PutPieceOnBoard();
 			Reset();
+			return true;
 		}
 		else
 		{
 			loc = tmp;
 		}
 	}
+
+	return false;
 }
 
 void Tetromino::RotateLeft()
@@ -144,6 +156,8 @@ bool Tetromino::CanMove()
 
 void Tetromino::PutPieceOnBoard()
 {
+	lockPiece = true;
+
 	for(const auto& f : figure)
 	{
 		board.SetTile(f.x + loc.x, f.y + loc.y, colorIndex);

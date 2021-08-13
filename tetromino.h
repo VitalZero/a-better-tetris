@@ -20,9 +20,10 @@ public:
 	void Draw();
 	void DrawG();
 	void Reset();
-	void Rotate();
-	void MoveBy(const Location& in_loc);
+	bool Rotate();
+	bool MoveBy(const Location& in_loc);
 	Location GetLocation() const { return loc; }
+	bool IsPieceLock() const { return lockPiece; }
 
 private:
 	void RotateRight();
@@ -41,7 +42,9 @@ private:
 	std::vector<Block> figure;
 	Board& board;
 	std::mt19937 rng{std::random_device()()};
-	MinoType minoType = MinoType::None; 
+	MinoType minoType = MinoType::None;
+	bool lockPiece = false;
+
 
 	static constexpr Block figuresList[7][4]= 
 	{
