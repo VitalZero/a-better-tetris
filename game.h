@@ -4,6 +4,7 @@
 #include "tetromino.h"
 #include "location.h"
 #include <raylib.h>
+#include "mino.h"
 
 class Game
 {
@@ -18,7 +19,7 @@ private:
 private:
 	Board board;
 	Tetromino mainPiece;
-	Tetromino nextPiece;
+	Mino nextPiece;
 	static constexpr int movePeriod = 50;
 	static constexpr int cellSize = 30;
 	int moveCounter = 0;

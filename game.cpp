@@ -3,10 +3,12 @@
 
 Game::Game(int x, int y, const std::string& title)
 	:
-	board({0, 0}, cellSize), mainPiece({6, 0}, cellSize, board), nextPiece(16, 3, cellSize, board)
+	board({0, 0}, cellSize), mainPiece({6, 0}, cellSize, board)
 {
 	InitWindow(x, y, title.c_str());
 	SetTargetFPS(60);
+
+	nextPiece.Init({16, 3}, cellSize, Mino::MinoType::O);
 
 	target = LoadRenderTexture(GetScreenWidth(), GetScreenHeight());
 	shader = LoadShader(0, TextFormat("bloom.fs", 330));
@@ -105,7 +107,7 @@ void Game::Draw()
 	
 	
 	//mainPiece.Draw();
-	//nextPiece.Draw();
+	nextPiece.Draw();
 
 	DrawFPS(GetScreenWidth() - 80, 20);
 	DrawText("VitalZero's Petris - VZ Studio 2021.", 10, GetScreenHeight() - 30, 20, RAYWHITE);
