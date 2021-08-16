@@ -3,8 +3,7 @@
 #include "board.h"
 #include "tetromino.h"
 #include "location.h"
-#include <raylib.h>
-#include "mino.h"
+#include <random>
 
 class Game
 {
@@ -19,14 +18,9 @@ private:
 private:
 	Board board;
 	Tetromino mainPiece;
-	Mino nextPiece;
 	static constexpr int movePeriod = 50;
 	static constexpr int cellSize = 30;
 	int moveCounter = 0;
-	Shader shader;
-	RenderTexture2D target;
-	Music bgm;
-	Sound moveSound;
-	Sound rotateSound;
-	Sound lockSound;
+	std::mt19937 rng{std::random_device()()};
+	std::uniform_int_distribution<int> minoDst;
 };

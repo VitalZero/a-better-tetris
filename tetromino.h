@@ -5,25 +5,30 @@
 #include "board.h"
 #include <random>
 
+struct Block
+{
+	int x;
+	int y;
+};
+
+using Figure = std::vector<Block>;
+
 class Tetromino
 {
-private:
-	struct Block
-	{
-		int x;
-		int y;
-	};
+public:
+	enum class MinoType { None = -1, S, T, O, L, J, Z, I };
 
 public:
 	Tetromino(const Location& loc, int size, Board& brd);
-	Tetromino(int x, int y, int size, Board& board);
 	void Draw();
 	void DrawG();
-	void Reset();
+	void Init(MinoType in_type);
+	void SetNext(MinoType in_type) { nextType = in_type; }
 	bool Rotate();
 	bool MoveBy(const Location& in_loc);
 	Location GetLocation() const { return loc; }
 	bool IsPieceLock() const { return lockPiece; }
+	void DrawNextTetromino(int x, int y, int size);
 
 private:
 	void RotateRight();
@@ -33,19 +38,17 @@ private:
 	int DrawGhost();
 
 private:
-	enum class MinoType { None = -1, S, T, O, L, J, Z, I };
 	Location loc;
 	const Location initialLoc;
 	int size;
 	Color color;
 	int colorIndex;
-	std::vector<Block> figure;
+	Figure figure;
 	Board& board;
 	std::mt19937 rng{std::random_device()()};
-	MinoType minoType = MinoType::None;
+	MinoType currentType = MinoType::None;
+	MinoType nextType = MinoType::None;
 	bool lockPiece = false;
-
-
 	static constexpr Block figuresList[7][4]= 
 	{
 		{ {0, 0}, {1, 0},  {-1, 1},  {0, 1} }, // S

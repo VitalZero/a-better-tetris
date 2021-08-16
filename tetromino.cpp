@@ -7,14 +7,7 @@ Tetromino::Tetromino(const Location& loc, int size, Board& board)
 	:
 	figure(4), loc(loc), initialLoc(loc), size(size), board(board)
 {
-	Reset();
-}
-
-Tetromino::Tetromino(int x, int y, int size, Board& board)
-	:
-	loc({x, y}), initialLoc({x, y}), size(size), board(board)
-{
-	Reset();
+	Init((MinoType)1);
 }
 
 void Tetromino::Draw()
@@ -26,11 +19,8 @@ void Tetromino::Draw()
 		int x1 = f.x + loc.x + brdLoc.x;
 		int y1 = f.y + loc.y + brdLoc.y;
 
-		//DrawRectangleLines(x1 * size + 1, (yOffset + y1) * size + 1, size - 1, size - 1, RED);
-		//DrawRectangle(x1 * size + 1, y1 * size + 1, size - 1, size - 1, color);
-		DrawRectangleLines(x1 * size + 1, y1 * size + 1, size - 1, size - 1, LIME);
+		DrawRectangle(x1 * size + 1, y1 * size + 1, size - 1, size - 1, color);
 	}
-
 }
 
 void Tetromino::DrawG()
@@ -44,12 +34,12 @@ void Tetromino::DrawG()
 		int x1 = f.x + loc.x + brdLoc.x;
 		int y1 = f.y + loc.y + brdLoc.y;
 
-		DrawRectangleLinesEx({(float)x1 * size + 1, (float)(yOffset + y1) * size + 1, (float)size - 1, (float)size - 1}, 1, MAROON);
+		DrawRectangleLinesEx({(float)x1 * size + 1, (float)(yOffset + y1) * size + 1, (float)size - 1, (float)size - 1}, 1, Fade(MAROON, 0.5f));
 	}
 
 }
 
-void Tetromino::Reset()
+void Tetromino::Init(MinoType in_type)
 {
 	lockPiece = false;
 	figure.clear();
@@ -65,7 +55,7 @@ void Tetromino::Reset()
 
 	int figureIndex = figureDst(rng);
 
-	minoType = (MinoType)figureIndex;
+	currentType = (MinoType)figureIndex;
 
 	for(int i = 0; i < 4; ++i)
 	{
@@ -75,7 +65,7 @@ void Tetromino::Reset()
 
 bool Tetromino::Rotate()
 {
-	if(minoType != MinoType::O)
+	if(currentType != MinoType::O)
 	{
 		RotateRight();
 
@@ -106,7 +96,7 @@ bool Tetromino::MoveBy(const Location& offset_loc)
 		{
 			loc = tmp;
 			PutPieceOnBoard();
-			Reset();
+			Init((MinoType)1);
 			return true;
 		}
 		else
@@ -116,6 +106,17 @@ bool Tetromino::MoveBy(const Location& offset_loc)
 	}
 
 	return false;
+}
+
+void Tetromino::DrawNextTetromino(int x, int y, int size)
+{
+	for(int i = 0; i < 4; ++i)
+	{
+		int x1 = (figuresList[(int)nextType][i].x * size) + x;
+		int y1 = (figuresList[(int)nextType][i].y * size) + y;
+
+		DrawRectangle(x1 + 1, y1 + 1, size - 1, size - 1, RAYWHITE);
+	}
 }
 
 void Tetromino::RotateLeft()
