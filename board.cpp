@@ -28,7 +28,7 @@ void Board::Draw()
 			int size = tileSize - 1;
 
 			int tileValue = TileAt(x, y);
-			assert(tileValue < 5);
+			assert(tileValue < 7);
 
 			// if(tileValue == (int)BlockType::Empty)
 			// {
@@ -41,8 +41,8 @@ void Board::Draw()
 			//else
 			if(tileValue > (int)BlockType::Empty)
 			{
-				//DrawRectangle(x1, y1, size, size, TetrominoColors[tileValue]);
-				DrawRectangleLinesEx({(float)x1, (float)y1, (float)size, (float)size}, 1, DARKBLUE);
+				DrawRectangle(x1, y1, size, size, TetrominoColors[tileValue]);
+				//DrawRectangleLinesEx({(float)x1, (float)y1, (float)size, (float)size}, 1, DARKBLUE);
 			}
 		}
 	}

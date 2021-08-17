@@ -24,17 +24,18 @@ public:
 	void DrawG();
 	void Init(MinoType in_type);
 	void SetNext(MinoType in_type) { nextType = in_type; }
+	MinoType GetNext() const { return nextType; }
 	bool Rotate();
 	bool MoveBy(const Location& in_loc);
 	Location GetLocation() const { return loc; }
-	bool IsPieceLock() const { return lockPiece; }
+	bool IsLanded() const { return landed; }
 	void DrawNextTetromino(int x, int y, int size);
+	void PutPieceOnBoard();
 
 private:
 	void RotateRight();
 	void RotateLeft();
 	bool CanMove();
-	void PutPieceOnBoard();
 	int DrawGhost();
 
 private:
@@ -48,7 +49,7 @@ private:
 	std::mt19937 rng{std::random_device()()};
 	MinoType currentType = MinoType::None;
 	MinoType nextType = MinoType::None;
-	bool lockPiece = false;
+	bool landed = false;
 	static constexpr Block figuresList[7][4]= 
 	{
 		{ {0, 0}, {1, 0},  {-1, 1},  {0, 1} }, // S

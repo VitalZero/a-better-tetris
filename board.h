@@ -17,14 +17,8 @@ public:
 	static constexpr int tileWidth = 12;
 	static constexpr int tileHeight = 20;
 	const int tileSize;
-	static constexpr Color TetrominoColors[5] = 
-	{
-		{242, 221, 192, 255}, 
-		{173, 234, 195, 255}, 
-		{160, 156, 243, 255}, 
-		{144, 218, 217, 255}, 
-		{231, 168, 227, 255}
-	};
+	static constexpr Color TetrominoColors[7] = 
+	{ BLUE, GREEN, RED, YELLOW, ORANGE, GRAY, PURPLE };
 	enum class BlockType { ToDelete = -2, Empty = -1 };
 
 public:

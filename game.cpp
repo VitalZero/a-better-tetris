@@ -1,4 +1,3 @@
-#pragma once
 #include "game.h"
 
 Game::Game(int x, int y, const std::string& title)
@@ -62,6 +61,12 @@ void Game::Update()
 
 	mainPiece.MoveBy(offset);
 
+	if(mainPiece.IsLanded())
+	{
+		mainPiece.PutPieceOnBoard();
+		mainPiece.Init(mainPiece.GetNext());
+		mainPiece.SetNext((Tetromino::MinoType)minoDst(rng));
+	}
 }
 
 void Game::Draw()
@@ -70,8 +75,10 @@ void Game::Draw()
 	board.Draw();
 	mainPiece.DrawG();
 	mainPiece.Draw();
+
+	DrawText("Next tetromino", 450, 70, 20, RAYWHITE);
 	mainPiece.DrawNextTetromino(500, 100, 30);
 
-	DrawFPS(GetScreenWidth() - 80, 20);
+	DrawFPS(GetScreenWidth() - 80, GetScreenHeight() - 30);
 	DrawText("VitalZero's Petris - VZ Studio 2021.", 10, GetScreenHeight() - 30, 20, RAYWHITE);
 }

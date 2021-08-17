@@ -41,25 +41,18 @@ void Tetromino::DrawG()
 
 void Tetromino::Init(MinoType in_type)
 {
-	lockPiece = false;
+	landed = false;
+
 	figure.clear();
 
 	loc = initialLoc;
 
-	std::uniform_int_distribution<int> colorDst(0, 4);
-	std::uniform_int_distribution<int> figureDst(0, 6);
-	
-	colorIndex = colorDst(rng);
-
-	color = Board::TetrominoColors[colorIndex];
-
-	int figureIndex = figureDst(rng);
-
-	currentType = (MinoType)figureIndex;
+	color = Board::TetrominoColors[(int)in_type];
+	colorIndex = (int)in_type;
 
 	for(int i = 0; i < 4; ++i)
 	{
-		figure.emplace_back(figuresList[figureIndex][i]);
+		figure.emplace_back(figuresList[(int)in_type][i]);
 	}
 }
 
@@ -95,8 +88,9 @@ bool Tetromino::MoveBy(const Location& offset_loc)
 		if(offset_loc.y > 0)
 		{
 			loc = tmp;
-			PutPieceOnBoard();
-			Init((MinoType)1);
+			//PutPieceOnBoard();
+			//Init(nextType);
+			landed = true;
 			return true;
 		}
 		else
@@ -115,7 +109,7 @@ void Tetromino::DrawNextTetromino(int x, int y, int size)
 		int x1 = (figuresList[(int)nextType][i].x * size) + x;
 		int y1 = (figuresList[(int)nextType][i].y * size) + y;
 
-		DrawRectangle(x1 + 1, y1 + 1, size - 1, size - 1, RAYWHITE);
+		DrawRectangle(x1 + 1, y1 + 1, size - 1, size - 1, Board::TetrominoColors[(int)nextType]);
 	}
 }
 
@@ -157,8 +151,6 @@ bool Tetromino::CanMove()
 
 void Tetromino::PutPieceOnBoard()
 {
-	lockPiece = true;
-
 	for(const auto& f : figure)
 	{
 		board.SetTile(f.x + loc.x, f.y + loc.y, colorIndex);
