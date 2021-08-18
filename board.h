@@ -12,6 +12,7 @@ public:
 	void SetTile(int x, int y, int value);
 	Location GetLocation() const;
 	void CheckAndDeleteLines();
+	void SetTextureReference(Texture2D* in_texture) { texture = in_texture; }
 	
 public:
 	static constexpr int tileWidth = 12;
@@ -27,4 +28,5 @@ public:
 private:
 	const Location loc;
 	int grid[tileWidth * tileHeight] = {};
+	Texture2D* texture;
 };

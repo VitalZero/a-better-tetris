@@ -7,7 +7,6 @@ Tetromino::Tetromino(const Location& loc, int size, Board& board)
 	:
 	figure(4), loc(loc), initialLoc(loc), size(size), board(board)
 {
-	Init((MinoType)1);
 }
 
 void Tetromino::Draw()
@@ -19,8 +18,13 @@ void Tetromino::Draw()
 		int x1 = f.x + loc.x + brdLoc.x;
 		int y1 = f.y + loc.y + brdLoc.y;
 
-		DrawRectangle(x1 * size + 1, y1 * size + 1, size - 1, size - 1, color);
+		//DrawRectangle(x1 * size + 1, y1 * size + 1, size - 1, size - 1, color);
+		int spriteX = (int)currentType * size;
+		int y2 = y1 * size;
+		DrawTextureRec(*texture, {(float)spriteX, 0, (float)size, (float)size}, {(float)x1 * size, (float)y2}, WHITE);
 	}
+
+	//DrawTexture(*texture, 10, 10, WHITE);
 }
 
 void Tetromino::DrawG()
@@ -47,12 +51,14 @@ void Tetromino::Init(MinoType in_type)
 
 	loc = initialLoc;
 
-	color = Board::TetrominoColors[(int)in_type];
-	colorIndex = (int)in_type;
+	currentType = in_type;
+
+	color = Board::TetrominoColors[(int)currentType];
+	colorIndex = (int)currentType;
 
 	for(int i = 0; i < 4; ++i)
 	{
-		figure.emplace_back(figuresList[(int)in_type][i]);
+		figure.emplace_back(figuresList[(int)currentType][i]);
 	}
 }
 
@@ -88,8 +94,6 @@ bool Tetromino::MoveBy(const Location& offset_loc)
 		if(offset_loc.y > 0)
 		{
 			loc = tmp;
-			//PutPieceOnBoard();
-			//Init(nextType);
 			landed = true;
 			return true;
 		}
@@ -108,8 +112,10 @@ void Tetromino::DrawNextTetromino(int x, int y, int size)
 	{
 		int x1 = (figuresList[(int)nextType][i].x * size) + x;
 		int y1 = (figuresList[(int)nextType][i].y * size) + y;
+		int spriteX = (int)nextType * size;
 
-		DrawRectangle(x1 + 1, y1 + 1, size - 1, size - 1, Board::TetrominoColors[(int)nextType]);
+		//DrawRectangle(x1 + 1, y1 + 1, size - 1, size - 1, Board::TetrominoColors[(int)nextType]);
+		DrawTextureRec(*texture, {(float)spriteX, 0, (float)size, (float)size}, {(float)x1, (float)y1}, WHITE);
 	}
 }
 
@@ -167,12 +173,8 @@ int Tetromino::DrawGhost()
 	{
 		for(const auto& f : figure)
 		{
-
-			if((f.y + yStart) >= board.tileHeight)
-			{
-				return yStart - loc.y - 1;
-			}
-			else if(board.TileAt(f.x + loc.x, f.y + yStart) >= 0)
+			if(((f.y + yStart) >= board.tileHeight) ||
+				(board.TileAt(f.x + loc.x, f.y + yStart) >= 0))
 			{
 				return yStart - loc.y - 1;
 			}

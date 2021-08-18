@@ -31,6 +31,7 @@ public:
 	bool IsLanded() const { return landed; }
 	void DrawNextTetromino(int x, int y, int size);
 	void PutPieceOnBoard();
+	void SetTextureReference(Texture2D* in_texture) { texture = in_texture; }
 
 private:
 	void RotateRight();
@@ -46,7 +47,6 @@ private:
 	int colorIndex;
 	Figure figure;
 	Board& board;
-	std::mt19937 rng{std::random_device()()};
 	MinoType currentType = MinoType::None;
 	MinoType nextType = MinoType::None;
 	bool landed = false;
@@ -60,4 +60,5 @@ private:
 		{ {0, 0}, {-1, 0}, {0, 1},  {1, 1} },// Z
 		{ {0, 0}, {-1, 0},  {1, 0},  {2, 0} }  // I
 	};
+	Texture2D* texture;
 };

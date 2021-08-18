@@ -41,8 +41,10 @@ void Board::Draw()
 			//else
 			if(tileValue > (int)BlockType::Empty)
 			{
-				DrawRectangle(x1, y1, size, size, TetrominoColors[tileValue]);
+				//DrawRectangle(x1, y1, size, size, TetrominoColors[tileValue]);
 				//DrawRectangleLinesEx({(float)x1, (float)y1, (float)size, (float)size}, 1, DARKBLUE);
+				int spriteX = tileValue * tileSize;
+				DrawTextureRec(*texture, {(float)spriteX, 0, (float)tileSize, (float)tileSize}, {(float)x1-1, (float)y1-1}, WHITE);
 			}
 		}
 	}

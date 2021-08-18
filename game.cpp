@@ -7,6 +7,10 @@ Game::Game(int x, int y, const std::string& title)
 	InitWindow(x, y, title.c_str());
 	SetTargetFPS(60);
 
+	tetrominoTexture = LoadTexture("resources/blocks.png");
+	mainPiece.SetTextureReference(&tetrominoTexture);
+	board.SetTextureReference(&tetrominoTexture);
+
 	mainPiece.Init((Tetromino::MinoType)minoDst(rng));
 	mainPiece.SetNext((Tetromino::MinoType)minoDst(rng));
 }
@@ -22,6 +26,7 @@ void Game::Run()
 		EndDrawing();
 	}
 
+	UnloadTexture(tetrominoTexture);
 	CloseWindow();
 }
 
