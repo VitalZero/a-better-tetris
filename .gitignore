@@ -10,4 +10,5 @@
 /main.pdb
 /tetromino.obj
 /vc140.pdb
-resources/
+resources/*.mp3
+resources/*.wav
