@@ -11,6 +11,13 @@ struct Block
 	int y;
 };
 
+struct CollisionType
+{
+	int left = 0;
+	int right = 0;
+	int bottom = 0;
+};
+
 using Figure = std::vector<Block>;
 
 class Tetromino
@@ -36,7 +43,7 @@ public:
 private:
 	void RotateRight();
 	void RotateLeft();
-	bool CanMove();
+	CollisionType CheckCollision();
 	int DrawGhost();
 
 private:

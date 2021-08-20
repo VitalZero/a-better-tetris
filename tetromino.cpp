@@ -23,8 +23,6 @@ void Tetromino::Draw()
 		int y2 = y1 * size;
 		DrawTextureRec(*texture, {(float)spriteX, 0, (float)size, (float)size}, {(float)x1 * size, (float)y2}, WHITE);
 	}
-
-	//DrawTexture(*texture, 10, 10, WHITE);
 }
 
 void Tetromino::DrawG()
@@ -37,8 +35,9 @@ void Tetromino::DrawG()
 	{
 		int x1 = f.x + loc.x + brdLoc.x;
 		int y1 = f.y + loc.y + brdLoc.y;
-
-		DrawRectangleLinesEx({(float)x1 * size + 1, (float)(yOffset + y1) * size + 1, (float)size - 1, (float)size - 1}, 1, Fade(MAROON, 0.5f));
+		int spriteX = (int)currentType * size;
+		//DrawRectangleLinesEx({(float)x1 * size + 1, (float)(yOffset + y1) * size + 1, (float)size - 1, (float)size - 1}, 1, Fade(MAROON, 0.5f));
+		DrawTextureRec(*texture, {(float)spriteX, 0, (float)size, (float)size}, {(float)x1 * size, (float)(yOffset + y1) * size}, Fade(WHITE, 0.3f));
 	}
 
 }
@@ -68,7 +67,8 @@ bool Tetromino::Rotate()
 	{
 		RotateRight();
 
-		if(!CanMove())
+		CollisionType collide = CheckCollision();
+		if(collide.left == 1 || collide.right == 1 || collide.bottom == 1)
 		{
 			RotateLeft();
 			return false;
@@ -89,7 +89,8 @@ bool Tetromino::MoveBy(const Location& offset_loc)
 
 	loc.Add(offset_loc);
 
-	if(!CanMove())
+	CollisionType collide = CheckCollision();
+	if(collide.left || collide.right || collide.bottom)
 	{
 		if(offset_loc.y > 0)
 		{
@@ -139,20 +140,26 @@ void Tetromino::RotateRight()
 	}
 }
 
-bool Tetromino::CanMove()
+CollisionType Tetromino::CheckCollision()
 {
-	for(const auto& f : figure)
+	for(const auto& block : figure)
 	{
-		if((f.x + loc.x) >= board.tileWidth ||
-			(f.y + loc.y) >= board.tileHeight)
-			return false;
-		else if((f.x + loc.x) < 0 || (f.y + loc.y) < 0)
-			return false;
-		if(board.TileAt(f.x + loc.x, f.y + loc.y) >= 0)
-			return false;
+		int x1 = block.x + loc.x;
+		int y1 = block.y + loc.y;
+
+		if(x1 >= board.tileWidth)
+			return { 0, 1, 0 };
+		else if(x1 < 0)
+			return { 1, 0, 0 };
+		if(y1 >= 0)
+		{
+			if((y1 >= board.tileHeight) ||
+			(board.TileAt(x1, y1) >= 0))
+			return { 0, 0, 1 };
+		}
 	}
 
-	return true;
+	return { 0, 0, 0 };
 }
 
 void Tetromino::PutPieceOnBoard()
@@ -173,10 +180,14 @@ int Tetromino::DrawGhost()
 	{
 		for(const auto& f : figure)
 		{
-			if(((f.y + yStart) >= board.tileHeight) ||
-				(board.TileAt(f.x + loc.x, f.y + yStart) >= 0))
+			int y1 = f.y + yStart;
+			if(y1 >= 0)
 			{
-				return yStart - loc.y - 1;
+				if((y1 >= board.tileHeight) ||
+				(board.TileAt(f.x + loc.x, f.y + yStart) >= 0))
+				{
+					return yStart - loc.y - 1;
+				}
 			}
 		}
 	}

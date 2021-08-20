@@ -39,13 +39,21 @@ void Game::Update()
 		mainPiece.Init((Tetromino::MinoType)1);
 	}
 	
-	if(IsKeyPressed(KEY_RIGHT))
+	if(IsKeyDown(KEY_RIGHT))
 	{
-		offset = {1, 0};
+		if(lateralCounter >= 7)
+		{
+			offset = {1, 0};
+			lateralCounter = 0;
+		}
 	}
-	else if(IsKeyPressed(KEY_LEFT))
+	else if(IsKeyDown(KEY_LEFT))
 	{
-		offset = {-1, 0};
+		if(lateralCounter >= 7)
+		{
+			offset = {-1, 0};
+			lateralCounter = 0;
+		}
 	}
 	
 	if(IsKeyPressed(KEY_UP))
@@ -57,6 +65,8 @@ void Game::Update()
 		moveCounter += 40;
 	else
 		++moveCounter;
+
+	++lateralCounter;
 	
 	if(moveCounter >= movePeriod)
 	{

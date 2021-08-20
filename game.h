@@ -21,6 +21,7 @@ private:
 	static constexpr int movePeriod = 50;
 	static constexpr int cellSize = 30;
 	int moveCounter = 0;
+	int lateralCounter = 7;
 	std::mt19937 rng{std::random_device()()};
 	std::uniform_int_distribution<int> minoDst;
 	Texture2D tetrominoTexture;
