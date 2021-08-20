@@ -98,9 +98,12 @@ void Board::CheckAndDeleteLines()
 
 void Board::DrawBorders()
 {
-	int x1 = (loc.x - 1) * tileSize;
-	int y1 = loc.y * tileSize;
-	DrawRectangleLines(x1, y1, tileSize, tileHeight * tileSize, BLUE);//{250, 252, 251, 255}); // left border
-	DrawRectangleLines(x1 + tileSize + (tileWidth * tileSize) + 1, y1, tileSize + 1, tileHeight * tileSize, BLUE);//{250, 252, 251, 255}); // right border
-	DrawRectangleLines(x1, y1 + tileHeight * tileSize, (tileWidth * tileSize) + (tileSize * 2) + 2, tileSize, BLUE);//{250, 252, 251, 255}); // bottom border
+	// int x1 = (loc.x - 1) * tileSize;
+	// int y1 = loc.y * tileSize;
+	// DrawRectangleLines(x1, y1, tileSize, tileHeight * tileSize, BLUE);//{250, 252, 251, 255}); // left border
+	// DrawRectangleLines(x1 + tileSize + (tileWidth * tileSize) + 1, y1, tileSize + 1, tileHeight * tileSize, BLUE);//{250, 252, 251, 255}); // right border
+	// DrawRectangleLines(x1, y1 + tileHeight * tileSize, (tileWidth * tileSize) + (tileSize * 2) + 2, tileSize, BLUE);//{250, 252, 251, 255}); // bottom border
+	
+	DrawTexture(*bg, 0, 0, WHITE);
+	
 }

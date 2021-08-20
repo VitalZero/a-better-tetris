@@ -90,7 +90,19 @@ bool Tetromino::MoveBy(const Location& offset_loc)
 	loc.Add(offset_loc);
 
 	CollisionType collide = CheckCollision();
-	if(collide.left || collide.right || collide.bottom)
+	if(collide.right)
+	{
+		loc.Add({collide.right, 0});
+
+		return false;
+	}
+	else if(collide.left)
+	{
+		loc.Add({-collide.left, 0});
+
+		return false;
+	}
+	if(collide.bottom)
 	{
 		if(offset_loc.y > 0)
 		{
@@ -148,9 +160,10 @@ CollisionType Tetromino::CheckCollision()
 		int y1 = block.y + loc.y;
 
 		if(x1 >= board.tileWidth)
-			return { 0, 1, 0 };
+			return { 0, -1, 0 };
 		else if(x1 < 0)
 			return { 1, 0, 0 };
+			
 		if(y1 >= 0)
 		{
 			if((y1 >= board.tileHeight) ||

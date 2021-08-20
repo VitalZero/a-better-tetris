@@ -13,6 +13,7 @@ public:
 	Location GetLocation() const;
 	void CheckAndDeleteLines();
 	void SetTextureReference(Texture2D* in_texture) { texture = in_texture; }
+	void SetBgReference(Texture2D* in_texture) { bg = in_texture; }
 	
 public:
 	static constexpr int tileWidth = 12;
@@ -29,4 +30,5 @@ private:
 	const Location loc;
 	int grid[tileWidth * tileHeight] = {};
 	Texture2D* texture;
+	Texture2D* bg;
 };

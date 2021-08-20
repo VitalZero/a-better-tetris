@@ -8,8 +8,11 @@ Game::Game(int x, int y, const std::string& title)
 	SetTargetFPS(60);
 
 	tetrominoTexture = LoadTexture("resources/blocks.png");
+	bg = LoadTexture("resources/quickbg.png");
+
 	mainPiece.SetTextureReference(&tetrominoTexture);
 	board.SetTextureReference(&tetrominoTexture);
+	board.SetBgReference(&bg);
 
 	mainPiece.Init((Tetromino::MinoType)minoDst(rng));
 	mainPiece.SetNext((Tetromino::MinoType)minoDst(rng));
@@ -21,12 +24,13 @@ void Game::Run()
 	{		
 		Update();
 		BeginDrawing();
-		ClearBackground(BLACK);
+		ClearBackground(MAGENTA);
 		Draw();
 		EndDrawing();
 	}
 
 	UnloadTexture(tetrominoTexture);
+	UnloadTexture(bg);
 	CloseWindow();
 }
 
