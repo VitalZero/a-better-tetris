@@ -4,6 +4,8 @@
 #include "location.h"
 #include "board.h"
 #include <random>
+#include <memory>
+#include "assetmanager.h"
 
 struct Block
 {
@@ -68,4 +70,5 @@ private:
 		{ {0, 0}, {-1, 0},  {1, 0},  {2, 0} }  // I
 	};
 	Texture2D* texture;
+	std::shared_ptr<Texture2D> pTexture;
 };

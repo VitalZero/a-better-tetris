@@ -4,6 +4,7 @@
 #include "tetromino.h"
 #include "location.h"
 #include <random>
+#include "assetmanager.h"
 
 class Game
 {
@@ -26,4 +27,5 @@ private:
 	std::uniform_int_distribution<int> minoDst;
 	Texture2D tetrominoTexture;
 	Texture2D bg;
+	float xSpring = 2.1;
 };

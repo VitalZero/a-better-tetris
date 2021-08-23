@@ -1,10 +1,14 @@
 #include "board.h"
 #include <cassert>
+#include "assetmanager.h"
 
 Board::Board(const Location& loc, int size)
 	:
 	loc({loc.x + 1, loc.y}), tileSize(size) // increase x and y so the border is not drawn outside
 {
+	//exture = AssetManager::LoadSprite("resources/blocks.png");
+	//texture = AssetManager::LoadSprite("resources/quickbg.png");
+
 	for(int y = 0; y < tileHeight; ++y)
 	{
 		for(int x = 0; x < tileWidth; ++x)

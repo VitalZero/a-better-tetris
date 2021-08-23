@@ -1,5 +1,6 @@
 #include "game.h"
 
+
 Game::Game(int x, int y, const std::string& title)
 	:
 	board({0, 0}, cellSize), mainPiece({6, 0}, cellSize, board), minoDst(0, 6)
@@ -100,4 +101,12 @@ void Game::Draw()
 
 	DrawFPS(GetScreenWidth() - 80, GetScreenHeight() - 30);
 	DrawText("VitalZero's Petris - VZ Studio 2021.", 10, GetScreenHeight() - 30, 20, RAYWHITE);
+
+	auto Spring = [](float k, float x)->float{
+		return -k * x + (1.1 + x);
+	};
+
+	xSpring = Spring(0.015, xSpring);
+
+	DrawCircle(xSpring + 50, 50, 10, WHITE);
 }

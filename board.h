@@ -2,6 +2,7 @@
 
 #include <raylib.h>
 #include "location.h"
+#include <memory>
 
 class Board
 {
@@ -31,4 +32,6 @@ private:
 	int grid[tileWidth * tileHeight] = {};
 	Texture2D* texture;
 	Texture2D* bg;
+	// std::shared_ptr<Texture2D> texture;
+	// std::shared_ptr<Texture2D> bg;
 };
