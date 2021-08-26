@@ -13,8 +13,8 @@ public:
 	void SetTile(int x, int y, int value);
 	Location GetLocation() const;
 	void CheckAndDeleteLines();
-	void SetTextureReference(Texture2D* in_texture) { texture = in_texture; }
-	void SetBgReference(Texture2D* in_texture) { bg = in_texture; }
+	void Init();
+	void CleanUp();
 	
 public:
 	static constexpr int tileWidth = 12;
@@ -30,8 +30,6 @@ public:
 private:
 	const Location loc;
 	int grid[tileWidth * tileHeight] = {};
-	Texture2D* texture;
-	Texture2D* bg;
-	// std::shared_ptr<Texture2D> texture;
-	// std::shared_ptr<Texture2D> bg;
+	std::shared_ptr<Texture2D> texture;
+	RenderTexture2D bg;
 };

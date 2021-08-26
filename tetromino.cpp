@@ -3,8 +3,6 @@
 #include <cmath>
 #include <algorithm>
 
-
-
 Tetromino::Tetromino(const Location& loc, int size, Board& board)
 	:
 	figure(4), loc(loc), initialLoc(loc), size(size), board(board)
@@ -47,7 +45,7 @@ void Tetromino::DrawG()
 
 void Tetromino::Init(MinoType in_type)
 {
-	pTexture = AssetManager::LoadSprite("resources/blocks.png");
+	texture = AssetManager::LoadSprite("resources/blocks.png");
 	landed = false;
 
 	figure.clear();
@@ -187,6 +185,11 @@ void Tetromino::PutPieceOnBoard()
 	}
 
 	board.CheckAndDeleteLines();
+}
+
+void Tetromino::CleanUp()
+{
+	UnloadTexture(*texture);
 }
 
 int Tetromino::DrawGhost()

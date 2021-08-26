@@ -1,5 +1,5 @@
 #include "game.h"
-
+#include "assetmanager.h"
 
 Game::Game(int x, int y, const std::string& title)
 	:
@@ -8,19 +8,15 @@ Game::Game(int x, int y, const std::string& title)
 	InitWindow(x, y, title.c_str());
 	SetTargetFPS(60);
 
-	tetrominoTexture = LoadTexture("resources/blocks.png");
-	bg = LoadTexture("resources/quickbg.png");
-
-	mainPiece.SetTextureReference(&tetrominoTexture);
-	board.SetTextureReference(&tetrominoTexture);
-	board.SetBgReference(&bg);
-
 	mainPiece.Init((Tetromino::MinoType)minoDst(rng));
 	mainPiece.SetNext((Tetromino::MinoType)minoDst(rng));
+
+	board.Init();
 }
 
 void Game::Run()
 {
+
 	while(!WindowShouldClose())
 	{		
 		Update();
@@ -30,8 +26,11 @@ void Game::Run()
 		EndDrawing();
 	}
 
-	UnloadTexture(tetrominoTexture);
-	UnloadTexture(bg);
+	board.CleanUp();
+	mainPiece.CleanUp();
+	AssetManager::CleanUp();
+	AssetManager::MurderOrphans();
+
 	CloseWindow();
 }
 
@@ -91,9 +90,9 @@ void Game::Update()
 
 void Game::Draw()
 {
-	board.DrawBorders();	
+	board.DrawBorders();
 	board.Draw();
-	mainPiece.DrawG();
+	//mainPiece.DrawG();
 	mainPiece.Draw();
 
 	DrawText("Next tetromino", 450, 70, 20, RAYWHITE);
@@ -101,12 +100,4 @@ void Game::Draw()
 
 	DrawFPS(GetScreenWidth() - 80, GetScreenHeight() - 30);
 	DrawText("VitalZero's Petris - VZ Studio 2021.", 10, GetScreenHeight() - 30, 20, RAYWHITE);
-
-	auto Spring = [](float k, float x)->float{
-		return -k * x + (1.1 + x);
-	};
-
-	xSpring = Spring(0.015, xSpring);
-
-	DrawCircle(xSpring + 50, 50, 10, WHITE);
 }

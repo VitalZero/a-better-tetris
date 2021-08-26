@@ -40,7 +40,7 @@ public:
 	bool IsLanded() const { return landed; }
 	void DrawNextTetromino(int x, int y, int size);
 	void PutPieceOnBoard();
-	void SetTextureReference(Texture2D* in_texture) { texture = in_texture; }
+	void CleanUp();
 
 private:
 	void RotateRight();
@@ -69,6 +69,6 @@ private:
 		{ {0, 0}, {-1, 0}, {0, 1},  {1, 1} },// Z
 		{ {0, 0}, {-1, 0},  {1, 0},  {2, 0} }  // I
 	};
-	Texture2D* texture;
-	std::shared_ptr<Texture2D> pTexture;
+
+	std::shared_ptr<Texture2D> texture;
 };

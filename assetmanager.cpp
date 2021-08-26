@@ -19,4 +19,27 @@ std::shared_ptr<Texture2D> AssetManager::LoadSprite(const std::string& resource)
 	}
 }
 
+void AssetManager::CleanUp()
+{
+	for(auto& tex : texturePtrs)
+	{
+		UnloadTexture(*tex.second);
+	}
+}
+
+void AssetManager::MurderOrphans()
+{
+	for(auto i = texturePtrs.begin(); i != texturePtrs.end(); )
+	{
+		if(i->second.unique())
+		{
+			i = texturePtrs.erase(i);
+		}
+		else
+		{
+			i++;
+		}
+	}
+}
+
 std::unordered_map<std::string, std::shared_ptr<Texture2D>> AssetManager::texturePtrs;

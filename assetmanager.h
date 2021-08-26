@@ -8,6 +8,8 @@ class AssetManager
 {
 public:
 	static std::shared_ptr<Texture2D> LoadSprite(const std::string& resource);
+	static void CleanUp();
+	static void MurderOrphans();
 
 private:
 	static std::unordered_map<std::string, std::shared_ptr<Texture2D>> texturePtrs;

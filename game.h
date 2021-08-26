@@ -25,7 +25,4 @@ private:
 	int lateralCounter = 7;
 	std::mt19937 rng{std::random_device()()};
 	std::uniform_int_distribution<int> minoDst;
-	Texture2D tetrominoTexture;
-	Texture2D bg;
-	float xSpring = 2.1;
 };

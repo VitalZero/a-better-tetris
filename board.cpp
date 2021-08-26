@@ -6,8 +6,8 @@ Board::Board(const Location& loc, int size)
 	:
 	loc({loc.x + 1, loc.y}), tileSize(size) // increase x and y so the border is not drawn outside
 {
-	//exture = AssetManager::LoadSprite("resources/blocks.png");
-	//texture = AssetManager::LoadSprite("resources/quickbg.png");
+	//texture = AssetManager::LoadSprite("resources/blocks.png");
+	//
 
 	for(int y = 0; y < tileHeight; ++y)
 	{
@@ -19,9 +19,7 @@ Board::Board(const Location& loc, int size)
 }
 
 void Board::Draw()
-{
-	//DrawBorders();
-	
+{	
 	for(int y = 0; y < tileHeight; ++y)
 	{
 		for(int x = 0; x < tileWidth; ++x)
@@ -46,7 +44,6 @@ void Board::Draw()
 			if(tileValue > (int)BlockType::Empty)
 			{
 				//DrawRectangle(x1, y1, size, size, TetrominoColors[tileValue]);
-				//DrawRectangleLinesEx({(float)x1, (float)y1, (float)size, (float)size}, 1, DARKBLUE);
 				int spriteX = tileValue * tileSize;
 				DrawTextureRec(*texture, {(float)spriteX, 0, (float)tileSize, (float)tileSize}, {(float)x1-1, (float)y1-1}, WHITE);
 			}
@@ -100,14 +97,35 @@ void Board::CheckAndDeleteLines()
 	}
 }
 
+void Board::Init()
+{
+	texture = AssetManager::LoadSprite("resources/blocks.png");
+
+	bg = LoadRenderTexture(tileWidth * tileSize, tileHeight * tileSize);
+
+	BeginTextureMode(bg);
+	ClearBackground(GRAY);
+	
+	for(int x = 0; x < tileWidth; ++x)
+	{
+		DrawLine(x * tileSize, 0, x * tileSize, tileHeight * tileSize - 1, BLACK);
+	}
+
+	for(int y = 0; y < tileHeight; ++y)
+	{
+		DrawLine(0, y * tileSize, tileWidth * tileSize - 1, y * tileSize, BLACK);
+	}
+
+	EndTextureMode();
+}
+
+void Board::CleanUp()
+{
+	UnloadRenderTexture(bg);
+	UnloadTexture(*texture);
+}
+
 void Board::DrawBorders()
 {
-	// int x1 = (loc.x - 1) * tileSize;
-	// int y1 = loc.y * tileSize;
-	// DrawRectangleLines(x1, y1, tileSize, tileHeight * tileSize, BLUE);//{250, 252, 251, 255}); // left border
-	// DrawRectangleLines(x1 + tileSize + (tileWidth * tileSize) + 1, y1, tileSize + 1, tileHeight * tileSize, BLUE);//{250, 252, 251, 255}); // right border
-	// DrawRectangleLines(x1, y1 + tileHeight * tileSize, (tileWidth * tileSize) + (tileSize * 2) + 2, tileSize, BLUE);//{250, 252, 251, 255}); // bottom border
-	
-	DrawTexture(*bg, 0, 0, WHITE);
-	
+	DrawTexture(bg.texture, loc.x * tileSize, loc.y * tileSize, WHITE);
 }
