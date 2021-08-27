@@ -13,7 +13,14 @@ Board::Board(const Location& loc, int size)
 	{
 		for(int x = 0; x < tileWidth; ++x)
 		{
-			grid[y * tileWidth + x] = (int)BlockType::Empty;
+			if(x == 0 || x == tileWidth - 1 || y == tileHeight - 1)
+			{
+				grid[y * tileWidth + x] = (int)BlockType::Wall;
+			}
+			else
+			{
+				grid[y * tileWidth + x] = (int)BlockType::Empty;
+			}
 		}
 	}
 }
@@ -24,28 +31,22 @@ void Board::Draw()
 	{
 		for(int x = 0; x < tileWidth; ++x)
 		{
-			int x1 = (x * tileSize) + 1 + (loc.x * tileSize);
-			int y1 = (y * tileSize) + 1 + (loc.y * tileSize);
+			int x1 = (x * tileSize) + (loc.x * tileSize);
+			int y1 = (y * tileSize) + (loc.y * tileSize);
 
-			int size = tileSize - 1;
+			int size = tileSize;
 
 			int tileValue = TileAt(x, y);
-			assert(tileValue < 7);
+			assert(tileValue < 7 || tileValue == (int)BlockType::Wall);
 
-			// if(tileValue == (int)BlockType::Empty)
-			// {
-			// 	DrawRectangle(x1, y1, size, size, {30, 30, 30, 255});
-			// }
-			// else if(tileValue == (int)BlockType::ToDelete)
-			// {
-			// 	DrawRectangle(x1, y1, size, size, DARKBROWN);
-			// }
-			//else
-			if(tileValue > (int)BlockType::Empty)
+			if(tileValue > (int)BlockType::Empty && tileValue != (int)BlockType::Wall)
 			{
-				//DrawRectangle(x1, y1, size, size, TetrominoColors[tileValue]);
 				int spriteX = tileValue * tileSize;
-				DrawTextureRec(*texture, {(float)spriteX, 0, (float)tileSize, (float)tileSize}, {(float)x1-1, (float)y1-1}, WHITE);
+				DrawTextureRec(*texture, {(float)spriteX, 0, (float)tileSize, (float)tileSize}, {(float)x1, (float)y1}, WHITE);
+			}
+			else if(tileValue == (int)BlockType::Wall)
+			{
+				DrawRectangle(x1, y1, tileSize, tileSize, GRAY);
 			}
 		}
 	}
@@ -78,7 +79,7 @@ Location Board::GetLocation() const
 
 void Board::CheckAndDeleteLines()
 {
-	int y1 = tileHeight - 1;
+	int y1 = tileHeight - 2;
 
 	for(int y = y1; y > 0; --y)
 	{
@@ -104,16 +105,16 @@ void Board::Init()
 	bg = LoadRenderTexture(tileWidth * tileSize, tileHeight * tileSize);
 
 	BeginTextureMode(bg);
-	ClearBackground(GRAY);
+	ClearBackground(LIGHTGRAY);
 	
 	for(int x = 0; x < tileWidth; ++x)
 	{
-		DrawLine(x * tileSize, 0, x * tileSize, tileHeight * tileSize - 1, BLACK);
+		DrawLine(x * tileSize , 0, x * tileSize, tileHeight * tileSize, GRAY);
 	}
 
 	for(int y = 0; y < tileHeight; ++y)
 	{
-		DrawLine(0, y * tileSize, tileWidth * tileSize - 1, y * tileSize, BLACK);
+		DrawLine(0, y * tileSize, tileWidth * tileSize, y * tileSize, GRAY);
 	}
 
 	EndTextureMode();

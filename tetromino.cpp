@@ -19,7 +19,6 @@ void Tetromino::Draw()
 		int x1 = f.x + loc.x + brdLoc.x;
 		int y1 = f.y + loc.y + brdLoc.y;
 
-		//DrawRectangle(x1 * size + 1, y1 * size + 1, size - 1, size - 1, color);
 		int spriteX = (int)currentType * size;
 		int y2 = y1 * size;
 		DrawTextureRec(*texture, {(float)spriteX, 0, (float)size, (float)size}, {(float)x1 * size, (float)y2}, WHITE);
@@ -69,12 +68,12 @@ bool Tetromino::Rotate()
 	{
 		RotateRight();
 
-		CollisionType collide = CheckCollision();
-		if(collide.left == 1 || collide.right == 1 || collide.bottom == 1)
-		{
-			RotateLeft();
-			return false;
-		}
+		// CollisionType collide = CheckCollision();
+		// if(collide.left == 1 || collide.right == 1 || collide.bottom == 1)
+		// {
+		// 	RotateLeft();
+		// 	return false;
+		// }
 
 		return true;
 	}
@@ -91,30 +90,21 @@ bool Tetromino::MoveBy(const Location& offset_loc)
 
 	loc.Add(offset_loc);
 
-	CollisionType collide = CheckCollision();
-	if(collide.right)
+	if(this->CheckCollision())
 	{
-		loc.Add({collide.right, 0});
-
-		return false;
-	}
-	else if(collide.left)
-	{
-		loc.Add({-collide.left, 0});
-
-		return false;
-	}
-	if(collide.bottom)
-	{
-		if(offset_loc.y > 0)
+		if(offset_loc.x > 0) // collide right
 		{
-			loc = tmp;
-			landed = true;
-			return true;
+			loc.Add({-1, 0});
 		}
-		else
+		else if(offset_loc.x < 0) // collide left
 		{
+			loc.Add({1, 0});
+		}
+		else if(offset_loc.y) // collide bottom
+		{
+			landed = true;
 			loc = tmp;
+			return true;
 		}
 	}
 
@@ -154,27 +144,17 @@ void Tetromino::RotateRight()
 	}
 }
 
-CollisionType Tetromino::CheckCollision()
+bool Tetromino::CheckCollision()
 {
-	for(const auto& block : figure)
+	for(auto i = figure.begin(); i != figure.end(); ++i)
 	{
-		int x1 = block.x + loc.x;
-		int y1 = block.y + loc.y;
-
-		if(x1 >= board.tileWidth)
-			return { 0, -1, 0 };
-		else if(x1 < 0)
-			return { 1, 0, 0 };
-			
-		if(y1 >= 0)
+		if(board.TileAt(i->x + loc.x, i->y + loc.y) > (int)Board::BlockType::Empty)
 		{
-			if((y1 >= board.tileHeight) ||
-			(board.TileAt(x1, y1) >= 0))
-			return { 0, 0, 1 };
+			return true;
 		}
 	}
 
-	return { 0, 0, 0 };
+	return false;
 }
 
 void Tetromino::PutPieceOnBoard()

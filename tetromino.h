@@ -45,7 +45,7 @@ public:
 private:
 	void RotateRight();
 	void RotateLeft();
-	CollisionType CheckCollision();
+	bool CheckCollision();
 	int DrawGhost();
 
 private:

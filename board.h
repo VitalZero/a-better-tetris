@@ -22,7 +22,7 @@ public:
 	const int tileSize;
 	static constexpr Color TetrominoColors[7] = 
 	{ BLUE, GREEN, RED, YELLOW, ORANGE, GRAY, PURPLE };
-	enum class BlockType { ToDelete = -2, Empty = -1 };
+	enum class BlockType { ToDelete = -2, Empty = -1, Wall = 10 };
 
 public:
 	void DrawBorders();
