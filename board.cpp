@@ -6,9 +6,6 @@ Board::Board(const Location& loc, int size)
 	:
 	loc({loc.x + 1, loc.y}), tileSize(size) // increase x and y so the border is not drawn outside
 {
-	//texture = AssetManager::LoadSprite("resources/blocks.png");
-	//
-
 	for(int y = 0; y < tileHeight; ++y)
 	{
 		for(int x = 0; x < tileWidth; ++x)
@@ -23,6 +20,31 @@ Board::Board(const Location& loc, int size)
 			}
 		}
 	}
+
+	texture = AssetManager::LoadSprite("resources/blocks.png");
+
+	bg = LoadRenderTexture(tileWidth * tileSize, tileHeight * tileSize);
+
+	BeginTextureMode(bg);
+	ClearBackground(LIGHTGRAY);
+	
+	for(int x = 0; x < tileWidth; ++x)
+	{
+		DrawLine(x * tileSize , 0, x * tileSize, tileHeight * tileSize, GRAY);
+	}
+
+	for(int y = 0; y < tileHeight; ++y)
+	{
+		DrawLine(0, y * tileSize, tileWidth * tileSize, y * tileSize, GRAY);
+	}
+
+	EndTextureMode();
+}
+
+Board::~Board()
+{
+	UnloadRenderTexture(bg);
+	UnloadTexture(*texture);
 }
 
 void Board::Draw()
@@ -81,49 +103,28 @@ void Board::CheckAndDeleteLines()
 {
 	int y1 = tileHeight - 2;
 
-	for(int y = y1; y > 0; --y)
+	for(int y = y1; y1 >= 0; --y)
 	{
 		int xCount = 0;
 
-		for(int x = 0; x < tileWidth; ++x)
+		for(int x = 1; x < tileWidth - 1; ++x)
 		{
-			if(TileAt(x, y) >= 0)
-				++xCount;
+			if(y >= 0)
+			{
+				if(TileAt(x, y) >= 0)
+					++xCount;
 			
-			SetTile(x, y1, TileAt(x, y));
+				SetTile(x, y1, TileAt(x, y));
+			}
+			else
+			{
+				SetTile(x, y1, (int)BlockType::Empty);
+			}
 		}
 
-		if(xCount < tileWidth)
+		if(xCount < tileWidth - 2)
 			--y1;
 	}
-}
-
-void Board::Init()
-{
-	texture = AssetManager::LoadSprite("resources/blocks.png");
-
-	bg = LoadRenderTexture(tileWidth * tileSize, tileHeight * tileSize);
-
-	BeginTextureMode(bg);
-	ClearBackground(LIGHTGRAY);
-	
-	for(int x = 0; x < tileWidth; ++x)
-	{
-		DrawLine(x * tileSize , 0, x * tileSize, tileHeight * tileSize, GRAY);
-	}
-
-	for(int y = 0; y < tileHeight; ++y)
-	{
-		DrawLine(0, y * tileSize, tileWidth * tileSize, y * tileSize, GRAY);
-	}
-
-	EndTextureMode();
-}
-
-void Board::CleanUp()
-{
-	UnloadRenderTexture(bg);
-	UnloadTexture(*texture);
 }
 
 void Board::DrawBorders()

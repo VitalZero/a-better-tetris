@@ -7,7 +7,12 @@ Tetromino::Tetromino(const Location& loc, int size, Board& board)
 	:
 	figure(4), loc(loc), initialLoc(loc), size(size), board(board)
 {
-	
+	texture = AssetManager::LoadSprite("resources/blocks.png");
+}
+
+Tetromino::~Tetromino()
+{
+	UnloadTexture(*texture);
 }
 
 void Tetromino::Draw()
@@ -25,26 +30,25 @@ void Tetromino::Draw()
 	}
 }
 
-void Tetromino::DrawG()
-{
-	Location brdLoc = board.GetLocation();
+// void Tetromino::DrawG()
+// {
+// 	Location brdLoc = board.GetLocation();
 
-	int yOffset = DrawGhost();
+// 	int yOffset = DrawGhost();
 
-	for(const auto& f : figure)
-	{
-		int x1 = f.x + loc.x + brdLoc.x;
-		int y1 = f.y + loc.y + brdLoc.y;
-		int spriteX = (int)currentType * size;
-		//DrawRectangleLinesEx({(float)x1 * size + 1, (float)(yOffset + y1) * size + 1, (float)size - 1, (float)size - 1}, 1, Fade(MAROON, 0.5f));
-		DrawTextureRec(*texture, {(float)spriteX, 0, (float)size, (float)size}, {(float)x1 * size, (float)(yOffset + y1) * size}, Fade(WHITE, 0.3f));
-	}
+// 	for(const auto& f : figure)
+// 	{
+// 		int x1 = f.x + loc.x + brdLoc.x;
+// 		int y1 = f.y + loc.y + brdLoc.y;
+// 		int spriteX = (int)currentType * size;
+// 		//DrawRectangleLinesEx({(float)x1 * size + 1, (float)(yOffset + y1) * size + 1, (float)size - 1, (float)size - 1}, 1, Fade(MAROON, 0.5f));
+// 		DrawTextureRec(*texture, {(float)spriteX, 0, (float)size, (float)size}, {(float)x1 * size, (float)(yOffset + y1) * size}, Fade(WHITE, 0.3f));
+// 	}
 
-}
+// }
 
 void Tetromino::Init(MinoType in_type)
 {
-	texture = AssetManager::LoadSprite("resources/blocks.png");
 	landed = false;
 
 	figure.clear();
@@ -54,7 +58,6 @@ void Tetromino::Init(MinoType in_type)
 	currentType = in_type;
 
 	color = Board::TetrominoColors[(int)currentType];
-	colorIndex = (int)currentType;
 
 	for(int i = 0; i < 4; ++i)
 	{
@@ -68,12 +71,11 @@ bool Tetromino::Rotate()
 	{
 		RotateRight();
 
-		// CollisionType collide = CheckCollision();
-		// if(collide.left == 1 || collide.right == 1 || collide.bottom == 1)
-		// {
-		// 	RotateLeft();
-		// 	return false;
-		// }
+		if(this->CheckCollision())
+		{
+			RotateLeft();
+		 	return false;
+		}
 
 		return true;
 	}
@@ -119,7 +121,6 @@ void Tetromino::DrawNextTetromino(int x, int y, int size)
 		int y1 = (figuresList[(int)nextType][i].y * size) + y;
 		int spriteX = (int)nextType * size;
 
-		//DrawRectangle(x1 + 1, y1 + 1, size - 1, size - 1, Board::TetrominoColors[(int)nextType]);
 		DrawTextureRec(*texture, {(float)spriteX, 0, (float)size, (float)size}, {(float)x1, (float)y1}, WHITE);
 	}
 }
@@ -148,9 +149,16 @@ bool Tetromino::CheckCollision()
 {
 	for(auto i = figure.begin(); i != figure.end(); ++i)
 	{
-		if(board.TileAt(i->x + loc.x, i->y + loc.y) > (int)Board::BlockType::Empty)
+		int x1 = i->x + loc.x;
+		int y1 = i->y + loc.y;
+
+		if(x1 >= 0 && x1 < board.tileWidth &&
+			y1 >= 0 && y1 < board.tileHeight)
 		{
-			return true;
+			if(board.TileAt(x1, y1) > (int)Board::BlockType::Empty)
+			{
+				return true;
+			}
 		}
 	}
 
@@ -159,38 +167,40 @@ bool Tetromino::CheckCollision()
 
 void Tetromino::PutPieceOnBoard()
 {
-	for(const auto& f : figure)
+	for(auto i = figure.begin(); i != figure.end(); ++i)
 	{
-		board.SetTile(f.x + loc.x, f.y + loc.y, colorIndex);
+		int x1 = i->x + loc.x;
+		int y1 = i->y + loc.y;
+
+		if(x1 >= 0 && x1 < board.tileWidth &&
+			y1 >= 0 && y1 < board.tileHeight)
+		{
+			board.SetTile(x1, y1, (int)currentType);
+		}
 	}
 
 	board.CheckAndDeleteLines();
 }
 
-void Tetromino::CleanUp()
-{
-	UnloadTexture(*texture);
-}
+// int Tetromino::DrawGhost()
+// {
+// 	int yOffset = board.tileHeight - 1;
 
-int Tetromino::DrawGhost()
-{
-	int yOffset = board.tileHeight - 1;
+// 	for(int yStart = loc.y; yStart < board.tileHeight; ++yStart)
+// 	{
+// 		for(const auto& f : figure)
+// 		{
+// 			int y1 = f.y + yStart;
+// 			if(y1 >= 0)
+// 			{
+// 				if((y1 >= board.tileHeight) ||
+// 				(board.TileAt(f.x + loc.x, f.y + yStart) >= 0))
+// 				{
+// 					return yStart - loc.y - 1;
+// 				}
+// 			}
+// 		}
+// 	}
 
-	for(int yStart = loc.y; yStart < board.tileHeight; ++yStart)
-	{
-		for(const auto& f : figure)
-		{
-			int y1 = f.y + yStart;
-			if(y1 >= 0)
-			{
-				if((y1 >= board.tileHeight) ||
-				(board.TileAt(f.x + loc.x, f.y + yStart) >= 0))
-				{
-					return yStart - loc.y - 1;
-				}
-			}
-		}
-	}
-
-	return board.tileHeight - 1 - loc.y;
-}
+// 	return board.tileHeight - 1 - loc.y;
+// }

@@ -1,10 +1,8 @@
-#include "game.h"
+#include "app.h"
 
 int main()
 {
-	InitAudioDevice();
-	Game game(640, 720, "Raylib Tetris test");
-	game.Run();
-	CloseAudioDevice();
+	App app{ 640, 720, "Raylib Tetris test" };
+	
 	return 0;
 }

@@ -8,13 +8,14 @@ class Board
 {
 public:
 	Board(const Location& loc, int size);
+	~Board();
+	Board(const Board&) = delete;
+	Board(const Board&&) = delete;
 	void Draw();
 	int TileAt(int x, int y) const;
 	void SetTile(int x, int y, int value);
 	Location GetLocation() const;
 	void CheckAndDeleteLines();
-	void Init();
-	void CleanUp();
 	
 public:
 	static constexpr int tileWidth = 12;

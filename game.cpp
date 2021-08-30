@@ -1,37 +1,30 @@
 #include "game.h"
 #include "assetmanager.h"
 
-Game::Game(int x, int y, const std::string& title)
+Game::Game()
 	:
 	board({0, 0}, cellSize), mainPiece({6, 0}, cellSize, board), minoDst(0, 6)
 {
-	InitWindow(x, y, title.c_str());
-	SetTargetFPS(60);
-
 	mainPiece.Init((Tetromino::MinoType)minoDst(rng));
 	mainPiece.SetNext((Tetromino::MinoType)minoDst(rng));
+}
 
-	board.Init();
+Game::~Game()
+{
+	AssetManager::CleanUp();
+	AssetManager::MurderOrphans();
 }
 
 void Game::Run()
 {
-
 	while(!WindowShouldClose())
 	{		
 		Update();
 		BeginDrawing();
-		ClearBackground(MAGENTA);
+		ClearBackground(BLACK);
 		Draw();
 		EndDrawing();
 	}
-
-	board.CleanUp();
-	mainPiece.CleanUp();
-	AssetManager::CleanUp();
-	AssetManager::MurderOrphans();
-
-	CloseWindow();
 }
 
 void Game::Update()
@@ -95,8 +88,14 @@ void Game::Draw()
 	//mainPiece.DrawG();
 	mainPiece.Draw();
 
-	DrawText("Next tetromino", 450, 70, 20, RAYWHITE);
-	mainPiece.DrawNextTetromino(500, 100, 30);
+	DrawText("HIGH SCORE", 420, 0, 30, RAYWHITE);
+	DrawText("123456789", 420, 30, 25, MAROON);
+	DrawText("Score", 420, 60, 30, RAYWHITE);
+	DrawText("100", 420, 90, 20, GOLD);
+
+	
+	DrawText("Next tetromino", 450, 160, 20, RAYWHITE);
+	mainPiece.DrawNextTetromino(500, 190, 30);
 
 	DrawFPS(GetScreenWidth() - 80, GetScreenHeight() - 30);
 	DrawText("VitalZero's Petris - VZ Studio 2021.", 10, GetScreenHeight() - 30, 20, RAYWHITE);

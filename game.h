@@ -9,7 +9,10 @@
 class Game
 {
 public:
-	Game(int x, int y, const std::string& title);
+	Game();
+	Game(const Game&) = delete;
+	Game(const Game&&) = delete;
+	~Game();
 	void Run();
 
 private:

@@ -29,8 +29,11 @@ public:
 
 public:
 	Tetromino(const Location& loc, int size, Board& brd);
+	~Tetromino();
+	Tetromino(const Tetromino&) = delete;
+	Tetromino(const Tetromino&&) = delete;
 	void Draw();
-	void DrawG();
+	//void DrawG();
 	void Init(MinoType in_type);
 	void SetNext(MinoType in_type) { nextType = in_type; }
 	MinoType GetNext() const { return nextType; }
@@ -40,20 +43,18 @@ public:
 	bool IsLanded() const { return landed; }
 	void DrawNextTetromino(int x, int y, int size);
 	void PutPieceOnBoard();
-	void CleanUp();
 
 private:
 	void RotateRight();
 	void RotateLeft();
 	bool CheckCollision();
-	int DrawGhost();
+	//int DrawGhost();
 
 private:
 	Location loc;
 	const Location initialLoc;
 	int size;
 	Color color;
-	int colorIndex;
 	Figure figure;
 	Board& board;
 	MinoType currentType = MinoType::None;
