@@ -101,33 +101,69 @@ Location Board::GetLocation() const
 
 void Board::CheckAndDeleteLines()
 {
-	int y1 = tileHeight - 2;
+	// int y1 = tileHeight - 2;
 
-	for(int y = y1; y1 >= 0; --y)
+	// for(int y = y1; y1 >= 0; --y)
+	// {
+	// 	int xCount = 0;
+
+	// 	for(int x = 1; x < tileWidth - 1; ++x)
+	// 	{
+	// 		if(y >= 0)
+	// 		{
+	// 			if(TileAt(x, y) >= 0)
+	// 				++xCount;
+			
+	// 			SetTile(x, y1, TileAt(x, y));
+	// 		}
+	// 		else
+	// 		{
+	// 			SetTile(x, y1, (int)BlockType::Empty);
+	// 		}
+	// 	}
+
+	// 	if(xCount < tileWidth - 2)
+	// 		--y1;
+	// }
+
+	for(int y = 0; y < tileHeight - 1; ++y)
 	{
-		int xCount = 0;
+		int xCounter = 0;
 
 		for(int x = 1; x < tileWidth - 1; ++x)
 		{
-			if(y >= 0)
+			if(TileAt(x, y) == (int)BlockType::Empty)
 			{
-				if(TileAt(x, y) >= 0)
-					++xCount;
-			
-				SetTile(x, y1, TileAt(x, y));
+				break;
 			}
 			else
 			{
-				SetTile(x, y1, (int)BlockType::Empty);
+				++xCounter;
 			}
 		}
 
-		if(xCount < tileWidth - 2)
-			--y1;
+		if(xCounter >= 10)
+		{
+			for(int upY = y; upY >= 0; --upY)
+			{
+				for(int x = 1; x < tileWidth - 1; ++x)
+				{
+					if(upY == 0)
+					{
+						SetTile(x, upY, (int)BlockType::Empty);
+					}
+					else if(upY > 0)
+					{
+						SetTile(x, upY, TileAt(x, upY - 1));
+					}
+				}
+			}
+		}
 	}
 }
 
 void Board::DrawBorders()
 {
-	DrawTexture(bg.texture, loc.x * tileSize, loc.y * tileSize, WHITE);
+	DrawTextureRec(bg.texture, { 0, 0, (float)bg.texture.width, (float)-bg.texture.height}, 
+		{ (float)loc.x * tileSize, (float)loc.y * tileSize }, WHITE);
 }
