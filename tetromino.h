@@ -34,20 +34,20 @@ public:
 	Tetromino(const Tetromino&&) = delete;
 	void Draw();
 	//void DrawG();
-	void Init(MinoType in_type);
-	void SetNext(MinoType in_type) { nextType = in_type; }
-	MinoType GetNext() const { return nextType; }
+	void Init(MinoType in_current, MinoType in_next = MinoType::None);
+	// void SetNext(MinoType in_type) { nextType = in_type; }
+	// MinoType GetNext() const { return nextType; }
 	bool Rotate();
-	bool MoveBy(const Location& in_loc);
+	void MoveBy(const Location& in_loc);
 	Location GetLocation() const { return loc; }
-	bool IsLanded() const { return landed; }
+	bool HasLanded() const { return landed; }
 	void DrawNextTetromino(int x, int y, int size);
 	void PutPieceOnBoard();
+	bool CheckCollision();
 
 private:
 	void RotateRight();
 	void RotateLeft();
-	bool CheckCollision();
 	//int DrawGhost();
 
 private:

@@ -16,6 +16,7 @@ public:
 	void Run();
 
 private:
+	void Input();
 	void Update();
 	void Draw();
 
@@ -28,4 +29,6 @@ private:
 	int lateralCounter = 7;
 	std::mt19937 rng{std::random_device()()};
 	std::uniform_int_distribution<int> minoDst;
+	Location offset = {};
+	bool pause = false;
 };

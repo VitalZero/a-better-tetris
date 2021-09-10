@@ -5,8 +5,7 @@ Game::Game()
 	:
 	board({0, 0}, cellSize), mainPiece({6, 0}, cellSize, board), minoDst(0, 6)
 {
-	mainPiece.Init((Tetromino::MinoType)minoDst(rng));
-	mainPiece.SetNext((Tetromino::MinoType)minoDst(rng));
+	mainPiece.Init((Tetromino::MinoType)minoDst(rng), (Tetromino::MinoType)minoDst(rng));
 }
 
 Game::~Game()
@@ -18,7 +17,8 @@ Game::~Game()
 void Game::Run()
 {
 	while(!WindowShouldClose())
-	{		
+	{
+		Input();
 		Update();
 		BeginDrawing();
 		ClearBackground(BLACK);
@@ -27,57 +27,72 @@ void Game::Run()
 	}
 }
 
-void Game::Update()
+void Game::Input()
 {
-	Location offset = {};
+	offset = {};
 
 	if(IsKeyPressed(KEY_SPACE))
 	{
-		mainPiece.Init((Tetromino::MinoType)1);
+		//mainPiece.Init((Tetromino::MinoType)1);
+		pause = !pause;
 	}
 	
-	if(IsKeyDown(KEY_RIGHT))
+	if(!pause)
 	{
-		if(lateralCounter >= 7)
+		if(IsKeyDown(KEY_RIGHT))
 		{
-			offset = {1, 0};
-			lateralCounter = 0;
+			if(lateralCounter >= 7)
+			{
+				offset = {1, 0};
+				lateralCounter = 0;
+			}
+		}
+		else if(IsKeyDown(KEY_LEFT))
+		{
+			if(lateralCounter >= 7)
+			{
+				offset = {-1, 0};
+				lateralCounter = 0;
+			}
+		}
+		
+		if(IsKeyPressed(KEY_UP))
+		{
+			mainPiece.Rotate();
+		}
+
+		if(IsKeyDown(KEY_DOWN) && (mainPiece.GetLocation().y > 0))
+			moveCounter += 40;
+		else
+			++moveCounter;
+
+		++lateralCounter;
+
+		if(moveCounter >= movePeriod)
+		{
+			moveCounter = 0;
+			offset.y = 1;
 		}
 	}
-	else if(IsKeyDown(KEY_LEFT))
+}
+
+void Game::Update()
+{
+	if(!pause)
 	{
-		if(lateralCounter >= 7)
+		mainPiece.MoveBy({offset.x, 0});
+		if(mainPiece.CheckCollision())
 		{
-			offset = {-1, 0};
-			lateralCounter = 0;
+			mainPiece.MoveBy({-offset.x, 0});
 		}
-	}
-	
-	if(IsKeyPressed(KEY_UP))
-	{
-		mainPiece.Rotate();
-	}
 
-	if(IsKeyDown(KEY_DOWN) && (mainPiece.GetLocation().y > 0))
-		moveCounter += 40;
-	else
-		++moveCounter;
-
-	++lateralCounter;
-	
-	if(moveCounter >= movePeriod)
-	{
-		moveCounter = 0;
-		offset.y = 1;
-	}
-
-	mainPiece.MoveBy(offset);
-
-	if(mainPiece.IsLanded())
-	{
-		mainPiece.PutPieceOnBoard();
-		mainPiece.Init(mainPiece.GetNext());
-		mainPiece.SetNext((Tetromino::MinoType)minoDst(rng));
+		mainPiece.MoveBy({0, offset.y});
+		if(mainPiece.CheckCollision())
+		{
+			mainPiece.MoveBy({0, -offset.y});
+			mainPiece.PutPieceOnBoard();
+			mainPiece.Init((Tetromino::MinoType)minoDst(rng));
+		}
 	}
 }
 
@@ -99,4 +114,12 @@ void Game::Draw()
 
 	DrawFPS(GetScreenWidth() - 80, GetScreenHeight() - 30);
 	DrawText("VitalZero's Petris - VZ Studio 2021.", 10, GetScreenHeight() - 30, 20, RAYWHITE);
+
+	if(pause)
+	{
+		std::string text = "Pause!!";
+		int textLenPixels = MeasureText(text.c_str(), 40);
+		DrawRectangle(0, 0, GetScreenWidth(), GetScreenHeight(), Fade(BLACK, 0.4));
+		DrawText(text.c_str(), GetScreenWidth() / 2 - textLenPixels / 2, GetScreenHeight() / 2 - 20, 40, RAYWHITE);
+	}
 }

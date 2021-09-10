@@ -47,15 +47,24 @@ void Tetromino::Draw()
 
 // }
 
-void Tetromino::Init(MinoType in_type)
+void Tetromino::Init(MinoType in_next, MinoType in_current)
 {
-	landed = false;
-
+	//landed = false;
 	figure.clear();
 
 	loc = initialLoc;
 
-	currentType = in_type;
+	if(in_current == MinoType::None)
+	{
+		currentType = nextType;
+		nextType = in_next;
+	}
+	else
+	{
+		nextType = in_next;
+		currentType = in_current;
+	}
+
 
 	color = Board::TetrominoColors[(int)currentType];
 
@@ -65,6 +74,8 @@ void Tetromino::Init(MinoType in_type)
 	}
 }
 
+// rotate the mino to the right if is not the O piece
+// if collides, rotate back to the left
 bool Tetromino::Rotate()
 {
 	if(currentType != MinoType::O)
@@ -83,34 +94,12 @@ bool Tetromino::Rotate()
 	return false;
 }
 
-bool Tetromino::MoveBy(const Location& offset_loc)
+void Tetromino::MoveBy(const Location& offset_loc)
 {
 	assert(offset_loc.x >= -1 && offset_loc.x <= 1);
 	assert(offset_loc.y >= -1 && offset_loc.y <= 1);
 
-	Location tmp = loc;
-
 	loc.Add(offset_loc);
-
-	if(this->CheckCollision())
-	{
-		if(offset_loc.x > 0) // collide right
-		{
-			loc.Add({-1, 0});
-		}
-		else if(offset_loc.x < 0) // collide left
-		{
-			loc.Add({1, 0});
-		}
-		else if(offset_loc.y) // collide bottom
-		{
-			landed = true;
-			loc = tmp;
-			return true;
-		}
-	}
-
-	return false;
 }
 
 void Tetromino::DrawNextTetromino(int x, int y, int size)
