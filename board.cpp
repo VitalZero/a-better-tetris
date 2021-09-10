@@ -99,7 +99,7 @@ Location Board::GetLocation() const
 	return loc;
 }
 
-void Board::CheckAndDeleteLines()
+int Board::CheckAndDeleteLines()
 {
 	// int y1 = tileHeight - 2;
 
@@ -125,6 +125,8 @@ void Board::CheckAndDeleteLines()
 	// 	if(xCount < tileWidth - 2)
 	// 		--y1;
 	// }
+
+	int deletedLines = 0;
 
 	for(int y = 0; y < tileHeight - 1; ++y)
 	{
@@ -158,8 +160,12 @@ void Board::CheckAndDeleteLines()
 					}
 				}
 			}
+
+			++deletedLines;
 		}
 	}
+
+	return deletedLines;
 }
 
 void Board::DrawBorders()

@@ -1,5 +1,6 @@
 #include "game.h"
 #include "assetmanager.h"
+#include "score.h"
 
 Game::Game()
 	:
@@ -90,8 +91,13 @@ void Game::Update()
 		if(mainPiece.CheckCollision())
 		{
 			mainPiece.MoveBy({0, -offset.y});
-			mainPiece.PutPieceOnBoard();
+			int deletedLines = mainPiece.PutPieceOnBoard();
 			mainPiece.Init((Tetromino::MinoType)minoDst(rng));
+
+			if(deletedLines > 0)
+			{
+				Score::GetReference().AddScore(deletedLines * (10 * deletedLines));
+			}
 		}
 	}
 }
@@ -103,10 +109,14 @@ void Game::Draw()
 	//mainPiece.DrawG();
 	mainPiece.Draw();
 
+	std::string scoreText;
+
 	DrawText("HIGH SCORE", 420, 0, 30, RAYWHITE);
-	DrawText("123456789", 420, 30, 25, MAROON);
+	scoreText = std::to_string(Score::GetReference().GetHighScore());
+	DrawText(scoreText.c_str(), 420, 30, 25, MAROON);
 	DrawText("Score", 420, 60, 30, RAYWHITE);
-	DrawText("100", 420, 90, 20, GOLD);
+	scoreText = std::to_string(Score::GetReference().GetCurrentScore());
+	DrawText(scoreText.c_str(), 420, 90, 20, GOLD);
 
 	
 	DrawText("Next tetromino", 450, 160, 20, RAYWHITE);

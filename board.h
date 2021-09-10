@@ -15,7 +15,7 @@ public:
 	int TileAt(int x, int y) const;
 	void SetTile(int x, int y, int value);
 	Location GetLocation() const;
-	void CheckAndDeleteLines();
+	int CheckAndDeleteLines();
 	
 public:
 	static constexpr int tileWidth = 12;

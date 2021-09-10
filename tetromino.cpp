@@ -154,7 +154,7 @@ bool Tetromino::CheckCollision()
 	return false;
 }
 
-void Tetromino::PutPieceOnBoard()
+int Tetromino::PutPieceOnBoard()
 {
 	for(auto i = figure.begin(); i != figure.end(); ++i)
 	{
@@ -168,7 +168,7 @@ void Tetromino::PutPieceOnBoard()
 		}
 	}
 
-	board.CheckAndDeleteLines();
+	return board.CheckAndDeleteLines();
 }
 
 // int Tetromino::DrawGhost()
