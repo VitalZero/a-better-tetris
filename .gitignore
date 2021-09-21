@@ -1,15 +1,10 @@
 /.vscode
 /board.ilk
-/board.obj
+/*.obj
 /board.pdb
-/game.obj
-/location.obj
 /main.exe
 /main.ilk
-/main.obj
 /main.pdb
-/tetromino.obj
 /vc140.pdb
 resources/*.mp3
 resources/*.wav
-/assetmanager.obj
