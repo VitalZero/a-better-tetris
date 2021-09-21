@@ -18,6 +18,10 @@ Board::Board(const Location& loc, int size)
 			{
 				grid[y * tileWidth + x] = (int)BlockType::Empty;
 			}
+			if(y > 14 && y < tileHeight && x == 8)
+			{
+				grid[y * tileWidth + x] = (int)BlockType::Wall;
+			}
 		}
 	}
 
@@ -44,7 +48,6 @@ Board::Board(const Location& loc, int size)
 Board::~Board()
 {
 	UnloadRenderTexture(bg);
-	UnloadTexture(*texture);
 }
 
 void Board::Draw()

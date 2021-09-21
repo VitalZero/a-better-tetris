@@ -34,7 +34,6 @@ void Game::Input()
 
 	if(IsKeyPressed(KEY_SPACE))
 	{
-		//mainPiece.Init((Tetromino::MinoType)1);
 		pause = !pause;
 	}
 	
@@ -42,7 +41,7 @@ void Game::Input()
 	{
 		if(IsKeyDown(KEY_RIGHT))
 		{
-			if(lateralCounter >= 7)
+			if(lateralCounter >= 10)
 			{
 				offset = {1, 0};
 				lateralCounter = 0;
@@ -50,7 +49,7 @@ void Game::Input()
 		}
 		else if(IsKeyDown(KEY_LEFT))
 		{
-			if(lateralCounter >= 7)
+			if(lateralCounter >= 10)
 			{
 				offset = {-1, 0};
 				lateralCounter = 0;
@@ -81,23 +80,42 @@ void Game::Update()
 {
 	if(!pause)
 	{
-		mainPiece.MoveBy({offset.x, 0});
-		if(mainPiece.CheckCollision())
+		// mainPiece.MoveBy({offset.x, 0});
+		// if(mainPiece.CheckCollision())
+		// {
+		// 	mainPiece.MoveBy({-offset.x, 0});
+		// }
+
+		// mainPiece.MoveBy({0, offset.y});
+		// if(mainPiece.CheckCollision())
+		// {
+		// 	mainPiece.MoveBy({0, -offset.y});
+		// 	int deletedLines = mainPiece.PutPieceOnBoard();
+		// 	mainPiece.Init((Tetromino::MinoType)minoDst(rng));
+
+		// 	if(deletedLines > 0)
+		// 	{
+		// 		Score::GetReference().AddScore(deletedLines * (10 * deletedLines));
+		// 	}
+		// }
+
+		if(mainPiece.CanMoveX(offset.x))
 		{
-			mainPiece.MoveBy({-offset.x, 0});
+			mainPiece.MoveBy({offset.x, 0});
 		}
 
-		mainPiece.MoveBy({0, offset.y});
-		if(mainPiece.CheckCollision())
+		if(mainPiece.CanMoveY(offset.y))
 		{
-			mainPiece.MoveBy({0, -offset.y});
-			int deletedLines = mainPiece.PutPieceOnBoard();
-			mainPiece.Init((Tetromino::MinoType)minoDst(rng));
-
-			if(deletedLines > 0)
+			mainPiece.MoveBy({0, offset.y});
+		}
+		else
+		{
+			int delLines = mainPiece.PutPieceOnBoard();
+			if(delLines > 0)
 			{
-				Score::GetReference().AddScore(deletedLines * (10 * deletedLines));
+				Score::GetReference().AddScore(delLines * (10 * delLines));
 			}
+			mainPiece.Init((Tetromino::MinoType)minoDst(rng));
 		}
 	}
 }

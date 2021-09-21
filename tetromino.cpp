@@ -12,7 +12,7 @@ Tetromino::Tetromino(const Location& loc, int size, Board& board)
 
 Tetromino::~Tetromino()
 {
-	UnloadTexture(*texture);
+	//UnloadTexture(*texture);
 }
 
 void Tetromino::Draw()
@@ -21,12 +21,11 @@ void Tetromino::Draw()
 
 	for(const auto& f : figure)
 	{
-		int x1 = f.x + loc.x + brdLoc.x;
-		int y1 = f.y + loc.y + brdLoc.y;
+		float x1 = (f.x + loc.x + brdLoc.x) * size;
+		float y1 = (f.y + loc.y + brdLoc.y) * size;
 
 		int spriteX = (int)currentType * size;
-		int y2 = y1 * size;
-		DrawTextureRec(*texture, {(float)spriteX, 0, (float)size, (float)size}, {(float)x1 * size, (float)y2}, WHITE);
+		DrawTextureRec(*texture, {(float)spriteX, 0, (float)size, (float)size}, {x1, y1}, WHITE);
 	}
 }
 
@@ -49,7 +48,6 @@ void Tetromino::Draw()
 
 void Tetromino::Init(MinoType in_next, MinoType in_current)
 {
-	//landed = false;
 	figure.clear();
 
 	loc = initialLoc;
@@ -64,7 +62,6 @@ void Tetromino::Init(MinoType in_next, MinoType in_current)
 		nextType = in_next;
 		currentType = in_current;
 	}
-
 
 	color = Board::TetrominoColors[(int)currentType];
 
@@ -152,6 +149,46 @@ bool Tetromino::CheckCollision()
 	}
 
 	return false;
+}
+
+bool Tetromino::CanMoveX(int dx) const
+{
+	for(const auto& b : figure)
+	{
+		int x1 = b.x + loc.x + dx;
+		int y1 = b.y + loc.y;
+
+		if(x1 <= 0 || x1 >= board.tileWidth - 1)
+		{
+			return false;
+		}
+		else if(y1 >= 0 && board.TileAt(x1, y1) > (int)Board::BlockType::Empty)
+		{
+			return false;
+		}
+	}
+
+	return true;
+}
+
+bool Tetromino::CanMoveY(int dy) const
+{
+	for(const auto& b : figure)
+	{
+		int x1 = b.x + loc.x;
+		int y1 = b.y + loc.y + dy;
+
+		if(y1 >= board.tileHeight - 1)
+		{
+			return false;
+		}
+		else if(y1 >= 0 && board.TileAt(x1, y1) > (int)Board::BlockType::Empty)
+		{
+			return false;
+		}
+	}
+
+	return true;
 }
 
 int Tetromino::PutPieceOnBoard()

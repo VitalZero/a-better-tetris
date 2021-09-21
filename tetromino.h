@@ -7,20 +7,7 @@
 #include <memory>
 #include "assetmanager.h"
 
-struct Block
-{
-	int x;
-	int y;
-};
-
-struct CollisionType
-{
-	int left = 0;
-	int right = 0;
-	int bottom = 0;
-};
-
-using Figure = std::vector<Block>;
+using Figure = std::vector<Vector2>;
 
 class Tetromino
 {
@@ -34,7 +21,7 @@ public:
 	Tetromino(const Tetromino&&) = delete;
 	void Draw();
 	//void DrawG();
-	void Init(MinoType in_current, MinoType in_next = MinoType::None);
+	void Init(MinoType in_next, MinoType incurrent = MinoType::None);
 	bool Rotate();
 	void MoveBy(const Location& in_loc);
 	Location GetLocation() const { return loc; }
@@ -42,6 +29,8 @@ public:
 	void DrawNextTetromino(int x, int y, int size);
 	int PutPieceOnBoard();
 	bool CheckCollision();
+	bool CanMoveX(int dx) const;
+	bool CanMoveY(int dy) const;
 
 private:
 	void RotateRight();
@@ -58,7 +47,7 @@ private:
 	MinoType currentType = MinoType::None;
 	MinoType nextType = MinoType::None;
 	bool landed = false;
-	static constexpr Block figuresList[7][4]= 
+	static constexpr Vector2 figuresList[7][4]= 
 	{
 		{ {0, 0}, {1, 0},  {-1, 1},  {0, 1} }, // S
 		{ {0, 0}, {-1, 0},  {1, 0}, {0, 1} }, // T
