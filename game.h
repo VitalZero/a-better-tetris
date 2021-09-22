@@ -31,4 +31,5 @@ private:
 	std::uniform_int_distribution<int> minoDst;
 	Location offset = {};
 	bool pause = false;
+	bool deleting = false;
 };
