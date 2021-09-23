@@ -11,6 +11,7 @@ public:
 	~Board();
 	Board(const Board&) = delete;
 	Board(const Board&&) = delete;
+	void Init();
 	void Update();
 	void Draw();
 	int TileAt(int x, int y) const;
@@ -19,6 +20,7 @@ public:
 	int CheckAndMarkLines();
 	void DeleteLines();
 	bool IsDeleting() const { return deleting; }
+	
 	
 public:
 	static constexpr int tileWidth = 12;

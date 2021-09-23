@@ -4,27 +4,8 @@
 
 Board::Board(const Location& loc, int size)
 	:
-	loc({loc.x + 1, loc.y}), tileSize(size) // increase x and y so the border is not drawn outside
+	loc({loc.x, loc.y}), tileSize(size) // increase x and y so the border is not drawn outside
 {
-	for(int y = 0; y < tileHeight; ++y)
-	{
-		for(int x = 0; x < tileWidth; ++x)
-		{
-			if(x == 0 || x == tileWidth - 1 || y == tileHeight - 1)
-			{
-				grid[y * tileWidth + x] = (int)BlockType::Wall;
-			}
-			else
-			{
-				grid[y * tileWidth + x] = (int)BlockType::Empty;
-			}
-			if(y > 14 && y < tileHeight && x == 8)
-			{
-				grid[y * tileWidth + x] = (int)BlockType::Wall;
-			}
-		}
-	}
-
 	texture = AssetManager::LoadSprite("resources/blocks.png");
 
 	bg = LoadRenderTexture(tileWidth * tileSize, tileHeight * tileSize);
@@ -43,11 +24,31 @@ Board::Board(const Location& loc, int size)
 	}
 
 	EndTextureMode();
+
+	Init();
 }
 
 Board::~Board()
 {
 	UnloadRenderTexture(bg);
+}
+
+void Board::Init()
+{
+	for(int y = 0; y < tileHeight; ++y)
+	{
+		for(int x = 0; x < tileWidth; ++x)
+		{
+			if(x == 0 || x == tileWidth - 1 || y == tileHeight - 1)
+			{
+				grid[y * tileWidth + x] = (int)BlockType::Wall;
+			}
+			else
+			{
+				grid[y * tileWidth + x] = (int)BlockType::Empty;
+			}
+		}
+	}
 }
 
 void Board::Update()
@@ -56,7 +57,7 @@ void Board::Update()
 	{
 		++drawTimer;
 
-		if(drawTimer > 60)
+		if(drawTimer >= 30)
 		{
 			deleting = false;
 			DeleteLines();
@@ -87,7 +88,7 @@ void Board::Draw()
 			else if(tileValue == (int)BlockType::ToDelete)
 			{
 				Color c;
-				if(drawTimer % 12 < 6)
+				if(drawTimer % 6 < 3)
 					c = RAYWHITE;
 				else
 					c = MAROON;

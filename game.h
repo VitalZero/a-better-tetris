@@ -25,6 +25,7 @@ private:
 	Tetromino mainPiece;
 	static constexpr int movePeriod = 50;
 	static constexpr int cellSize = 30;
+	static constexpr int lateralCounterPeriod = 7;
 	int moveCounter = 0;
 	int lateralCounter = 7;
 	std::mt19937 rng{std::random_device()()};
@@ -32,4 +33,6 @@ private:
 	Location offset = {};
 	bool pause = false;
 	bool deleting = false;
+	enum class States { Game, Pause, Deleting, GameOver };
+	States currentState;
 };
