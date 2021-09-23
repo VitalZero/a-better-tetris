@@ -2,7 +2,7 @@
 
 int main()
 {
-	App app{ 640, 720, "Raylib Tetris test" };
+	App app{ 700, 600, "Raylib Tetris test" };
 	
 	return 0;
 }

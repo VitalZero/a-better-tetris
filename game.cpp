@@ -82,25 +82,29 @@ void Game::Update()
 	{
 		board.Update();
 		
-		if(mainPiece.CanMoveX(offset.x))
+		if(!board.IsDeleting())
+		
 		{
-			mainPiece.MoveBy({offset.x, 0});
-		}
-
-		if(mainPiece.CanMoveY(offset.y))
-		{
-			mainPiece.MoveBy({0, offset.y});
-		}
-		else
-		{
-			mainPiece.PutPieceOnBoard();
-
-			int delLines = board.CheckAndMarkLines();
-			if(delLines > 0)
+			if(mainPiece.CanMoveX(offset.x))
 			{
-				Score::GetReference().AddScore(delLines * (10 * delLines));
+				mainPiece.MoveBy({offset.x, 0});
 			}
-			mainPiece.Init((Tetromino::MinoType)minoDst(rng));
+
+			if(mainPiece.CanMoveY(offset.y))
+			{
+				mainPiece.MoveBy({0, offset.y});
+			}
+			else
+			{
+				mainPiece.PutPieceOnBoard();
+
+				int delLines = board.CheckAndMarkLines();
+				if(delLines > 0)
+				{
+					Score::GetReference().AddScore(delLines * (10 * delLines));
+				}
+				mainPiece.Init((Tetromino::MinoType)minoDst(rng));
+			}
 		}
 	}
 }

@@ -56,7 +56,7 @@ void Board::Update()
 	{
 		++drawTimer;
 
-		if(drawTimer > 120)
+		if(drawTimer > 60)
 		{
 			deleting = false;
 			DeleteLines();
@@ -87,7 +87,7 @@ void Board::Draw()
 			else if(tileValue == (int)BlockType::ToDelete)
 			{
 				Color c;
-				if(drawTimer % 30 < 15)
+				if(drawTimer % 12 < 6)
 					c = RAYWHITE;
 				else
 					c = MAROON;
@@ -195,8 +195,6 @@ int Board::CheckAndMarkLines()
 			}
 
 			++deletedLines;
-
-			linesToDelete[deletedLines - 1] = y;
 		}
 	}
 
@@ -210,11 +208,12 @@ int Board::CheckAndMarkLines()
 
 void Board::DeleteLines()
 {
-	for(int y = tileHeight - 2; y >= 0; --y)
+	int y1 = tileHeight - 2;
+	for(int y = 0; y < tileHeight - 1; ++y)
 	{
-		if(TileAt(0, y) == (int)BlockType::ToDelete)
+		if(TileAt(1, y) == (int)BlockType::ToDelete)
 		{
-			for(int upY = y - 1; upY >= 0; --upY)
+			for(int upY = y; upY >= 0; --upY)
 			{
 				for(int x = 1; x < tileWidth - 1; ++x)
 				{

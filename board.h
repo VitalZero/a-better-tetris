@@ -18,6 +18,7 @@ public:
 	Location GetLocation() const;
 	int CheckAndMarkLines();
 	void DeleteLines();
+	bool IsDeleting() const { return deleting; }
 	
 public:
 	static constexpr int tileWidth = 12;
@@ -33,7 +34,6 @@ public:
 private:
 	const Location loc;
 	int grid[tileWidth * tileHeight] = {};
-	int linesToDelete[4] = {};
 	int numFullLines = 0;
 	std::shared_ptr<Texture2D> texture;
 	RenderTexture2D bg;
