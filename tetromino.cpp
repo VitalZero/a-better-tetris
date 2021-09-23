@@ -25,7 +25,7 @@ void Tetromino::Draw()
 		float y1 = (f.y + loc.y + brdLoc.y) * size;
 
 		int spriteX = (int)currentType * size;
-		DrawTextureRec(*texture, {(float)spriteX, 0, (float)size, (float)size}, {x1, y1}, WHITE);
+		DrawTextureRec(*texture, {(float)spriteX + 30, 0, (float)size, (float)size}, {x1, y1}, WHITE);
 	}
 }
 
@@ -107,7 +107,7 @@ void Tetromino::DrawNextTetromino(int x, int y, int size)
 		int y1 = (figuresList[(int)nextType][i].y * size) + y;
 		int spriteX = (int)nextType * size;
 
-		DrawTextureRec(*texture, {(float)spriteX, 0, (float)size, (float)size}, {(float)x1, (float)y1}, WHITE);
+		DrawTextureRec(*texture, {(float)spriteX + 30, 0, (float)size, (float)size}, {(float)x1, (float)y1}, WHITE);
 	}
 }
 

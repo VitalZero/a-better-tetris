@@ -83,7 +83,7 @@ void Board::Draw()
 			if(tileValue > (int)BlockType::Empty && tileValue != (int)BlockType::Wall)
 			{
 				int spriteX = tileValue * tileSize;
-				DrawTextureRec(*texture, {(float)spriteX, 0, (float)tileSize, (float)tileSize}, {(float)x1, (float)y1}, WHITE);
+				DrawTextureRec(*texture, {(float)spriteX + 30, 0, (float)tileSize, (float)tileSize}, {(float)x1, (float)y1}, WHITE);
 			}
 			else if(tileValue == (int)BlockType::ToDelete)
 			{
