@@ -15,12 +15,12 @@ Board::Board(const Location& loc, int size)
 
 	for(int x = 0; x < tileWidth; ++x)
 	{
-		DrawLine((x * tileSize) - 1, 0, x * tileSize, tileHeight * tileSize, GRAY);
+		DrawLine((x * tileSize), 0, x * tileSize, tileHeight * tileSize, GRAY);
 	}
 
 	for(int y = 0; y < tileHeight; ++y)
 	{
-		DrawLine(0, (y * tileSize) - 1, tileWidth * tileSize, y * tileSize, GRAY);
+		DrawLine(0, (y * tileSize), tileWidth * tileSize, y * tileSize, GRAY);
 	}
 
 	EndTextureMode();

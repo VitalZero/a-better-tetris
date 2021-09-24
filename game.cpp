@@ -4,7 +4,7 @@
 
 Game::Game()
 	:
-	board({0, 0}, cellSize), mainPiece({6, 0}, cellSize, board), minoDst(0, 6), currentState(States::Game)
+	board({0, 0}, cellSize), mainPiece({6, 0}, cellSize, board), minoDst(0, 6), currentState(States::StartScreen)
 {
 	mainPiece.Init((Tetromino::MinoType)minoDst(rng), (Tetromino::MinoType)minoDst(rng));
 }
@@ -35,6 +35,16 @@ void Game::Input()
 	
 	switch(currentState)
 	{
+		// Start Screen State
+		case States::StartScreen:
+
+			if(IsKeyPressed(KEY_ENTER))
+			{
+				currentState = States::Game;
+			}
+
+		break;
+
 		// Game state
 		case States::Game:
 
@@ -106,6 +116,18 @@ void Game::Update()
 {
 	switch(currentState)
 	{
+		// Start Screen State
+		case States::StartScreen:
+
+			++secTimer;
+
+			if(secTimer >= 60)
+			{
+				secTimer = 0;
+			}
+
+		break;
+
 		// Game state
 		case States::Game:
 
@@ -172,9 +194,27 @@ void Game::Draw()
 {
 	std::string scoreText;
 	std::string text;
+	int textLenPixels = 0;
 	
 	switch(currentState)
 	{
+		// Start Screen State
+		case States::StartScreen:
+		{
+			text = "VZ's PETRIS";
+			textLenPixels = MeasureText(text.c_str(), 60);
+			DrawText(text.c_str(), GetScreenWidth() / 2 - textLenPixels / 2, 200, 60, RAYWHITE);
+
+			text = "Press ENTER to start";
+			textLenPixels = MeasureText(text.c_str(), 40);
+
+			if(secTimer % 30 < 15)
+			{
+				DrawText(text.c_str(), GetScreenWidth() / 2 - textLenPixels / 2, (GetScreenHeight() / 2 - 20) + 40, 40, RAYWHITE);
+			}
+		}
+		break;
+
 		// Game state
 		case States::Game:
 		{
@@ -229,8 +269,8 @@ void Game::Draw()
 			DrawFPS(GetScreenWidth() - 80, GetScreenHeight() - 30);
 			DrawText("VitalZero's Petris - VZ Studio 2021.", 10, GetScreenHeight() - 30, 20, RAYWHITE);
 
-			text = "Pause!!";
-			int textLenPixels = MeasureText(text.c_str(), 40);
+			text = "Paused";
+			textLenPixels = MeasureText(text.c_str(), 40);
 			DrawRectangle(0, 0, GetScreenWidth(), GetScreenHeight(), Fade(BLACK, 0.4));
 			DrawText(text.c_str(), GetScreenWidth() / 2 - textLenPixels / 2, GetScreenHeight() / 2 - 20, 40, RAYWHITE);
 		}
@@ -240,14 +280,14 @@ void Game::Draw()
 		case States::GameOver:
 		{
 			text = "Game Over";
-			int textLenPixels = MeasureText(text.c_str(), 40);
+			textLenPixels = MeasureText(text.c_str(), 40);
 			DrawRectangle(0, 0, GetScreenWidth(), GetScreenHeight(), Fade(BLACK, 0.4));
 			DrawText(text.c_str(), GetScreenWidth() / 2 - textLenPixels / 2, GetScreenHeight() / 2 - 20, 40, RAYWHITE);
 
-			text = "Press Enter to play agan";
-			textLenPixels = MeasureText(text.c_str(), 40);
+			text = "Press Enter to play again";
+			textLenPixels = MeasureText(text.c_str(), 30);
 			DrawRectangle(0, 0, GetScreenWidth(), GetScreenHeight(), Fade(BLACK, 0.4));
-			DrawText(text.c_str(), GetScreenWidth() / 2 - textLenPixels / 2, (GetScreenHeight() / 2 - 20) + 40, 40, RAYWHITE);
+			DrawText(text.c_str(), GetScreenWidth() / 2 - textLenPixels / 2, (GetScreenHeight() / 2 - 20) + 40, 30, RAYWHITE);
 		}
 		break;
 	}	
