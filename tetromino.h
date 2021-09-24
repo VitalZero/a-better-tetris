@@ -25,7 +25,6 @@ public:
 	bool Rotate();
 	void MoveBy(const Location& in_loc);
 	Location GetLocation() const { return loc; }
-	//bool HasLanded() const { return landed; }
 	void DrawNextTetromino(int x, int y, int size);
 	int PutPieceOnBoard();
 	bool CheckCollision();
