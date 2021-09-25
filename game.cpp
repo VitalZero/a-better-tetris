@@ -7,10 +7,12 @@ Game::Game()
 	board({0, 0}, cellSize), mainPiece({6, 0}, cellSize, board), minoDst(0, 6), currentState(States::StartScreen)
 {
 	mainPiece.Init((Tetromino::MinoType)minoDst(rng), (Tetromino::MinoType)minoDst(rng));
+	music = LoadMusicStream("resources/tetrisbgm.mp3");
 }
 
 Game::~Game()
 {
+	UnloadMusicStream(music);
 	AssetManager::CleanUp();
 	AssetManager::MurderOrphans();
 }
@@ -37,16 +39,20 @@ void Game::Input()
 	{
 		// Start Screen State
 		case States::StartScreen:
+			StopMusicStream(music);
 
 			if(IsKeyPressed(KEY_ENTER))
 			{
 				currentState = States::Game;
+				PlayMusicStream(music);
 			}
 
 		break;
 
 		// Game state
 		case States::Game:
+		
+			UpdateMusicStream(music);
 
 			if(IsKeyPressed(KEY_SPACE))
 			{
@@ -101,10 +107,12 @@ void Game::Input()
 
 		// Game Over State
 		case States::GameOver:
+			StopMusicStream(music);
 
 			if(IsKeyPressed(KEY_ENTER))
 			{
 				currentState = States::Game;
+				PlayMusicStream(music);
 			}
 			
 		break;

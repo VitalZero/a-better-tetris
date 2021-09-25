@@ -37,4 +37,5 @@ private:
 	enum class States { StartScreen, Game, Pause, Deleting, GameOver };
 	States currentState;
 	float frameTime = 0;
+	Music music;
 };
