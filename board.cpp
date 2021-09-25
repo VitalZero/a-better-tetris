@@ -11,16 +11,14 @@ Board::Board(const Location& loc, int size)
 	bg = LoadRenderTexture(tileWidth * tileSize, tileHeight * tileSize);
 
 	BeginTextureMode(bg);
-	ClearBackground(LIGHTGRAY);
+	ClearBackground(Fade(LIGHTGRAY, 0.0f));
 
-	for(int x = 0; x < tileWidth; ++x)
+	for(int y = 0; y < tileHeight - 1; ++y)
 	{
-		DrawLine((x * tileSize), 0, x * tileSize, tileHeight * tileSize, GRAY);
-	}
-
-	for(int y = 0; y < tileHeight; ++y)
-	{
-		DrawLine(0, (y * tileSize), tileWidth * tileSize, y * tileSize, GRAY);
+		for(int x = 1; x < tileWidth - 1; ++x)
+		{
+			DrawTextureRec(*texture, {(float)tileSize * 7, 0, (float)tileSize, (float)tileSize}, {(float)x * tileSize, (float)y * tileSize}, Fade(WHITE, 1.0f));
+		}
 	}
 
 	EndTextureMode();
@@ -85,24 +83,20 @@ void Board::Draw()
 			{
 				DrawTextureRec(*texture, {(float)spriteX, 0, (float)tileSize, (float)tileSize}, {(float)x1, (float)y1}, WHITE);
 			}
-			else if(tileValue == (int)BlockType::Empty)
-			{
-				DrawTextureRec(*texture, {30 * 7, 0, (float)tileSize, (float)tileSize}, {(float)x1, (float)y1}, Fade(WHITE, 0.5));
-			}
 			else if(tileValue == (int)BlockType::ToDelete)
 			{
 				Color c;
-				if(drawTimer % 6 < 3)
+				if(drawTimer % 12 < 6)
 					c = RAYWHITE;
 				else
 					c = MAROON;
 
 				DrawRectangle(x1, y1, tileSize, tileSize, c);
 			}
-			else if(tileValue == (int)BlockType::Wall)
-			{
-				//DrawRectangle(x1, y1, tileSize, tileSize, DARKGRAY);
-			}
+			// else if(tileValue == (int)BlockType::Wall)	// dont draw the wall at the moment
+			// {
+			// 	DrawRectangle(x1, y1, tileSize, tileSize, DARKGRAY);
+			// }
 		}
 	}
 }
@@ -127,38 +121,8 @@ void Board::SetTile(int x, int y, int value)
 	grid[y * tileWidth + x] = value;
 }
 
-Location Board::GetLocation() const
-{
-	return loc;
-}
-
 int Board::CheckAndMarkLines()
 {
-	// int y1 = tileHeight - 2;
-
-	// for(int y = y1; y1 >= 0; --y)
-	// {
-	// 	int xCount = 0;
-
-	// 	for(int x = 1; x < tileWidth - 1; ++x)
-	// 	{
-	// 		if(y >= 0)
-	// 		{
-	// 			if(TileAt(x, y) >= 0)
-	// 				++xCount;
-
-	// 			SetTile(x, y1, TileAt(x, y));
-	// 		}
-	// 		else
-	// 		{
-	// 			SetTile(x, y1, (int)BlockType::Empty);
-	// 		}
-	// 	}
-
-	// 	if(xCount < tileWidth - 2)
-	// 		--y1;
-	// }
-
 	int deletedLines = 0;
 
 	for(int y = 0; y < tileHeight - 1; ++y)
@@ -179,21 +143,6 @@ int Board::CheckAndMarkLines()
 
 		if(xCounter >= 10)
 		{
-			// for(int upY = y; upY >= 0; --upY)
-			// {
-			// 	for(int x = 1; x < tileWidth - 1; ++x)
-			// 	{
-			// 		if(upY == 0)
-			// 		{
-			// 			SetTile(x, upY, (int)BlockType::Empty);
-			// 		}
-			// 		else if(upY > 0)
-			// 		{
-			// 			SetTile(x, upY, TileAt(x, upY - 1));
-			// 		}
-			// 	}
-			// }
-
 			for(int x = 1; x < tileWidth - 1; ++x)
 			{
 				SetTile(x, y, (int)BlockType::ToDelete);
@@ -202,8 +151,6 @@ int Board::CheckAndMarkLines()
 			++deletedLines;
 		}
 	}
-
-	numFullLines = deletedLines;
 
 	if(deletedLines > 0)	
 		deleting = true;
@@ -234,12 +181,10 @@ void Board::DeleteLines()
 			}
 		}
 	}
-
-	numFullLines = 0;
 }
 
 void Board::DrawBorders()
 {
-	// DrawTextureRec(bg.texture, { 0, 0, (float)bg.texture.width, (float)-bg.texture.height},
-	// 	{ (float)loc.x * tileSize, (float)loc.y * tileSize }, WHITE);
+	DrawTextureRec(bg.texture, { 0, 0, (float)bg.texture.width, (float)-bg.texture.height},
+		{ (float)loc.x * tileSize, (float)loc.y * tileSize }, WHITE);
 }

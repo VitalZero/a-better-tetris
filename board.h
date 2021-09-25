@@ -16,7 +16,7 @@ public:
 	void Draw();
 	int TileAt(int x, int y) const;
 	void SetTile(int x, int y, int value);
-	Location GetLocation() const;
+	Location GetLocation() const { return loc; }
 	int CheckAndMarkLines();
 	void DeleteLines();
 	bool IsDeleting() const { return deleting; }
@@ -36,7 +36,6 @@ public:
 private:
 	const Location loc;
 	int grid[tileWidth * tileHeight] = {};
-	int numFullLines = 0;
 	std::shared_ptr<Texture2D> texture;
 	RenderTexture2D bg;
 	int drawTimer = 0;

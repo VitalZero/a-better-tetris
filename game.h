@@ -17,7 +17,7 @@ public:
 
 private:
 	void Input();
-	void Update();
+	void Update(float dt);
 	void Draw();
 
 private:
@@ -36,4 +36,5 @@ private:
 	bool deleting = false;
 	enum class States { StartScreen, Game, Pause, Deleting, GameOver };
 	States currentState;
+	float frameTime = 0;
 };

@@ -205,7 +205,6 @@ int Tetromino::PutPieceOnBoard()
 		}
 	}
 
-	//return board.CheckAndDeleteLines();
 	return 0;
 }
 

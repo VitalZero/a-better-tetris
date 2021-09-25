@@ -20,7 +20,7 @@ void Game::Run()
 	while(!WindowShouldClose())
 	{
 		Input();
-		Update();
+		Update(GetFrameTime());
 		BeginDrawing();
 		ClearBackground(BLACK);
 		Draw();
@@ -112,8 +112,9 @@ void Game::Input()
 	}
 }
 
-void Game::Update()
+void Game::Update(float dt)
 {
+	frameTime = dt;
 	switch(currentState)
 	{
 		// Start Screen State
@@ -290,5 +291,7 @@ void Game::Draw()
 			DrawText(text.c_str(), GetScreenWidth() / 2 - textLenPixels / 2, (GetScreenHeight() / 2 - 20) + 40, 30, RAYWHITE);
 		}
 		break;
-	}	
+	}
+
+	DrawText(std::to_string(frameTime).c_str(), GetScreenWidth() - 80, GetScreenHeight() - 60, 20, RAYWHITE);
 }

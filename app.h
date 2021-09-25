@@ -5,9 +5,9 @@ class App
 public:
 	App(int x, int y, const std::string& title)
 	{
+		SetTargetFPS(60);
 		InitWindow(x, y, title.c_str());
 		InitAudioDevice();
-		SetTargetFPS(60);
 
 		Game game;
 		game.Run();
