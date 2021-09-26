@@ -51,8 +51,6 @@ void Game::Input()
 
 		// Game state
 		case States::Game:
-		
-			UpdateMusicStream(music);
 
 			if(IsKeyPressed(KEY_SPACE))
 			{
@@ -139,6 +137,7 @@ void Game::Update(float dt)
 
 		// Game state
 		case States::Game:
+			UpdateMusicStream(music);
 
 			board.Update();
 			
@@ -175,10 +174,13 @@ void Game::Update(float dt)
 
 		// Pause State
 		case States::Pause:
+			
+			UpdateMusicStream(music);
 		break;
 
 		// Deleting State
 		case States::Deleting:
+			UpdateMusicStream(music);
 		
 			board.Update();
 
