@@ -8,6 +8,10 @@ Game::Game()
 {
 	mainPiece.Init((Tetromino::MinoType)minoDst(rng), (Tetromino::MinoType)minoDst(rng));
 	music = LoadMusicStream("resources/tetrisbgm.mp3");
+	moveSound = AssetManager::LoadSound("resources/move.wav");
+	rotateSound = AssetManager::LoadSound("resources/rotate.wav");
+	landSound = AssetManager::LoadSound("resources/land.wav");
+	lineSound = AssetManager::LoadSound("resources/line.wav");
 }
 
 Game::~Game()
@@ -32,7 +36,6 @@ void Game::Run()
 
 void Game::Input()
 {
-
 	offset = {};
 	
 	switch(currentState)
@@ -76,7 +79,10 @@ void Game::Input()
 			
 			if(IsKeyPressed(KEY_UP))
 			{
-				mainPiece.Rotate();
+				if(mainPiece.Rotate())
+				{
+					PlaySound(*rotateSound);
+				}
 			}
 
 			if(IsKeyDown(KEY_DOWN) && (mainPiece.GetLocation().y > 0))
@@ -141,9 +147,13 @@ void Game::Update(float dt)
 
 			board.Update();
 			
-			if(mainPiece.CanMoveX(offset.x))
+			if(offset.x != 0)
 			{
-				mainPiece.MoveBy({offset.x, 0});
+				if(mainPiece.CanMoveX(offset.x))
+				{
+					PlaySound(*moveSound);
+					mainPiece.MoveBy({offset.x, 0});
+				}
 			}
 
 			if(mainPiece.CanMoveY(offset.y))
@@ -160,8 +170,14 @@ void Game::Update(float dt)
 
 					if(delLines > 0)
 					{
+						PlaySound(*lineSound);
 						Score::GetReference().AddScore(delLines * (10 * delLines));
 					}
+					else
+					{
+						PlaySound(*landSound);
+					}
+
 					mainPiece.Init((Tetromino::MinoType)minoDst(rng));
 
 					currentState = States::Deleting;

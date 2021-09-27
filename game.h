@@ -38,4 +38,8 @@ private:
 	States currentState;
 	float frameTime = 0;
 	Music music;
+	std::shared_ptr<Sound> moveSound;
+	std::shared_ptr<Sound> rotateSound;
+	std::shared_ptr<Sound> landSound;
+	std::shared_ptr<Sound> lineSound;
 };
