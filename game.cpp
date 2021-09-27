@@ -7,7 +7,9 @@ Game::Game()
 	board({0, 0}, cellSize), mainPiece({6, 0}, cellSize, board), minoDst(0, 6), currentState(States::StartScreen)
 {
 	mainPiece.Init((Tetromino::MinoType)minoDst(rng), (Tetromino::MinoType)minoDst(rng));
-	music = LoadMusicStream("resources/tetrisbgm.mp3");
+	music = AssetManager::LoadMusic("resources/tetrisbgm.mp3");
+	//SetMusicVolume(*music, 0.8f);
+
 	moveSound = AssetManager::LoadSound("resources/move.wav");
 	rotateSound = AssetManager::LoadSound("resources/rotate.wav");
 	landSound = AssetManager::LoadSound("resources/land.wav");
@@ -16,7 +18,6 @@ Game::Game()
 
 Game::~Game()
 {
-	UnloadMusicStream(music);
 	AssetManager::CleanUp();
 	AssetManager::MurderOrphans();
 }
@@ -42,12 +43,12 @@ void Game::Input()
 	{
 		// Start Screen State
 		case States::StartScreen:
-			StopMusicStream(music);
+			StopMusicStream(*music);
 
 			if(IsKeyPressed(KEY_ENTER))
 			{
 				currentState = States::Game;
-				PlayMusicStream(music);
+				PlayMusicStream(*music);
 			}
 
 		break;
@@ -111,12 +112,12 @@ void Game::Input()
 
 		// Game Over State
 		case States::GameOver:
-			StopMusicStream(music);
+			StopMusicStream(*music);
 
 			if(IsKeyPressed(KEY_ENTER))
 			{
 				currentState = States::Game;
-				PlayMusicStream(music);
+				PlayMusicStream(*music);
 			}
 			
 		break;
@@ -143,7 +144,7 @@ void Game::Update(float dt)
 
 		// Game state
 		case States::Game:
-			UpdateMusicStream(music);
+			UpdateMusicStream(*music);
 
 			board.Update();
 			
@@ -190,13 +191,12 @@ void Game::Update(float dt)
 
 		// Pause State
 		case States::Pause:
-			
-			UpdateMusicStream(music);
+			UpdateMusicStream(*music);
 		break;
 
 		// Deleting State
 		case States::Deleting:
-			UpdateMusicStream(music);
+			UpdateMusicStream(*music);
 		
 			board.Update();
 

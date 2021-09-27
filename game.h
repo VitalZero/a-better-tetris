@@ -37,7 +37,7 @@ private:
 	enum class States { StartScreen, Game, Pause, Deleting, GameOver };
 	States currentState;
 	float frameTime = 0;
-	Music music;
+	std::shared_ptr<Music> music;
 	std::shared_ptr<Sound> moveSound;
 	std::shared_ptr<Sound> rotateSound;
 	std::shared_ptr<Sound> landSound;
