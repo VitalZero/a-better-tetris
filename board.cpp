@@ -15,7 +15,7 @@ Board::Board(const Location& loc, int size)
 
 	for(int y = 0; y < tileHeight - 1; ++y)
 	{
-		for(int x = 1; x < tileWidth - 1; ++x)
+		for(int x = 1; x < tileWidth - 1; ++	x)
 		{
 			DrawTextureRec(*texture, {(float)tileSize * 7, 0, (float)tileSize, (float)tileSize}, {(float)x * tileSize, (float)y * tileSize}, Fade(WHITE, 1.0f));
 		}

@@ -5,6 +5,7 @@
 #include "location.h"
 #include <random>
 #include "assetmanager.h"
+#include "wrappers.h"
 
 class Game
 {
@@ -42,4 +43,5 @@ private:
 	std::shared_ptr<Sound> rotateSound;
 	std::shared_ptr<Sound> landSound;
 	std::shared_ptr<Sound> lineSound;
+	std::shared_ptr<CTexture2D> testTexture;
 };

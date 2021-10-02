@@ -14,6 +14,7 @@ Game::Game()
 	rotateSound = AssetManager::LoadSound("resources/rotate.wav");
 	landSound = AssetManager::LoadSound("resources/land.wav");
 	lineSound = AssetManager::LoadSound("resources/line.wav");
+	testTexture = AssetManager::LoadAsset<Texture2D>("resources/clothes.png");
 }
 
 Game::~Game()
@@ -228,6 +229,8 @@ void Game::Draw()
 		// Start Screen State
 		case States::StartScreen:
 		{
+			DrawTexture(testTexture->GetTexture(), 10, 10, WHITE);
+			
 			text = "VZ's PETRIS";
 			textLenPixels = MeasureText(text.c_str(), 60);
 			DrawText(text.c_str(), GetScreenWidth() / 2 - textLenPixels / 2, 200, 60, RAYWHITE);
