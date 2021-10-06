@@ -43,5 +43,5 @@ private:
 	std::shared_ptr<Sound> rotateSound;
 	std::shared_ptr<Sound> landSound;
 	std::shared_ptr<Sound> lineSound;
-	std::shared_ptr<CTexture2D> testTexture;
+	std::shared_ptr<Texture2D> testTexture;
 };
