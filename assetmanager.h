@@ -4,21 +4,18 @@
 #include <string>
 #include <memory>
 #include "wrappers.h"
-#include <iostream>
 
 class AssetManager
 {
 public:
-	static std::shared_ptr<Texture2D> LoadSprite(const std::string& resource);
-	static std::shared_ptr<Sound> LoadSound(const std::string& resource);
-	static std::shared_ptr<Music> LoadMusic(const std::string& resource);
-	static void CleanUp();
-	static void MurderOrphans();
+	std::shared_ptr<Texture2D> LoadSprite(const std::string& resource);
+	std::shared_ptr<Sound> LoadSound(const std::string& resource);
+	std::shared_ptr<Music> LoadMusic(const std::string& resource);
+	void CleanUp();
+	void MurderOrphans();
 
 private:
-	static std::unordered_map<std::string, std::shared_ptr<Texture2D>> texturePtrs;
-	static std::unordered_map<std::string, std::shared_ptr<Sound>> soundPtrs;
-	static std::unordered_map<std::string, std::shared_ptr<Music>> musicPtrs;
+	std::unordered_map<std::string, std::shared_ptr<Texture2D>> texturePtrs;
+	std::unordered_map<std::string, std::shared_ptr<Sound>> soundPtrs;
+	std::unordered_map<std::string, std::shared_ptr<Music>> musicPtrs;
 };
-
-//std::unordered_map<std::string, std::shared_ptr<Texture2D>> AssetManager::texturePtrs;

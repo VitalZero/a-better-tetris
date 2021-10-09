@@ -3,11 +3,12 @@
 #include <raylib.h>
 #include "location.h"
 #include <memory>
+#include "gamedata.h"
 
 class Board
 {
 public:
-	Board(const Location& loc, int size);
+	Board(const Location& loc, int size, GameDataRef data);
 	~Board();
 	Board(const Board&) = delete;
 	Board(const Board&&) = delete;

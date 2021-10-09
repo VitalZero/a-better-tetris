@@ -116,7 +116,3 @@ void AssetManager::MurderOrphans()
 	}
 
 }
-
-std::unordered_map<std::string, std::shared_ptr<Texture2D>> AssetManager::texturePtrs;
-std::unordered_map<std::string, std::shared_ptr<Sound>> AssetManager::soundPtrs;
-std::unordered_map<std::string, std::shared_ptr<Music>> AssetManager::musicPtrs;

@@ -2,11 +2,11 @@
 #include <cassert>
 #include "assetmanager.h"
 
-Board::Board(const Location& loc, int size)
+Board::Board(const Location& loc, int size, GameDataRef data)
 	:
 	loc({loc.x, loc.y}), tileSize(size) // increase x and y so the border is not drawn outside
 {
-	texture = AssetManager::LoadSprite("resources/blocks.png");
+	texture = data->assets.LoadSprite("resources/blocks.png");
 
 	bg = LoadRenderTexture(tileWidth * tileSize, tileHeight * tileSize);
 

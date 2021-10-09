@@ -5,7 +5,7 @@
 #include "board.h"
 #include <random>
 #include <memory>
-#include "assetmanager.h"
+#include "gamedata.h"
 
 using Figure = std::vector<Vector2>;
 
@@ -15,7 +15,7 @@ public:
 	enum class MinoType { None = -1, S, T, O, L, J, Z, I };
 
 public:
-	Tetromino(const Location& loc, int size, Board& brd);
+	Tetromino(const Location& loc, int size, Board& brd, GameDataRef data);
 	~Tetromino();
 	Tetromino(const Tetromino&) = delete;
 	Tetromino(const Tetromino&&) = delete;

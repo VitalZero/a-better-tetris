@@ -3,11 +3,11 @@
 #include <cmath>
 #include <algorithm>
 
-Tetromino::Tetromino(const Location& loc, int size, Board& board)
+Tetromino::Tetromino(const Location& loc, int size, Board& board, GameDataRef data)
 	:
 	figure(4), loc(loc), initialLoc(loc), size(size), board(board)
 {
-	texture = AssetManager::LoadSprite("resources/blocks.png");
+	texture = data->assets.LoadSprite("resources/blocks.png");
 }
 
 Tetromino::~Tetromino()
