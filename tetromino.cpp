@@ -7,7 +7,7 @@ Tetromino::Tetromino(const Location& loc, int size, Board& board, GameDataRef da
 	:
 	figure(4), loc(loc), initialLoc(loc), size(size), board(board)
 {
-	texture = data->assets.LoadSprite("resources/blocks.png");
+	texture = data->assets.LoadAsset<Texture2D>("resources/blocks.png");
 }
 
 Tetromino::~Tetromino()

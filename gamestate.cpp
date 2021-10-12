@@ -15,15 +15,15 @@ GameState::~GameState()
 void GameState::Init()
 {
 	mainPiece.Init((Tetromino::MinoType)minoDst(rng), (Tetromino::MinoType)minoDst(rng));
-	music = data->assets.LoadMusic("resources/tetrisbgm.mp3");
+	music = data->assets.LoadAsset<Music>("resources/tetrisbgm.mp3");
     
 	SetMusicVolume(*music, 0.8f);
     PlayMusicStream(*music);
 
-	moveSound = data->assets.LoadSound("resources/move.wav");
-	rotateSound = data->assets.LoadSound("resources/rotate.wav");
-	landSound = data->assets.LoadSound("resources/land.wav");
-	lineSound = data->assets.LoadSound("resources/line.wav");
+	moveSound = data->assets.LoadAsset<Sound>("resources/move.wav");
+	rotateSound = data->assets.LoadAsset<Sound>("resources/rotate.wav");
+	landSound = data->assets.LoadAsset<Sound>("resources/land.wav");
+	lineSound = data->assets.LoadAsset<Sound>("resources/line.wav");
 }
 
 void GameState::Input()

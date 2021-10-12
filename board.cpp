@@ -6,7 +6,7 @@ Board::Board(const Location& loc, int size, GameDataRef data)
 	:
 	loc({loc.x, loc.y}), tileSize(size) // increase x and y so the border is not drawn outside
 {
-	texture = data->assets.LoadSprite("resources/blocks.png");
+	texture = data->assets.LoadAsset<Texture2D>("resources/blocks.png");
 
 	bg = LoadRenderTexture(tileWidth * tileSize, tileHeight * tileSize);
 
