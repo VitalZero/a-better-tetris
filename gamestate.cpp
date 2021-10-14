@@ -1,15 +1,20 @@
 #include "gamestate.h"
+#include "pausestate.h"
+#include <iostream>
 
 GameState::GameState(GameDataRef data)
     :
-    data(std::make_shared<GameData>()), board({0, 0}, cellSize, data), mainPiece({6, 0}, cellSize, board, data), minoDst(0, 6)
+    data(data), board({0, 0}, cellSize, data), mainPiece({6, 0}, cellSize, board, data), minoDst(0, 6)
 {
 }
 
 GameState::~GameState()
 {
-	data->assets.CleanUp();
-	data->assets.MurderOrphans();
+}
+
+
+void GameState::Resume()
+{
 }
 
 void GameState::Init()
@@ -33,9 +38,10 @@ void GameState::Input()
     if(IsKeyPressed(KEY_SPACE))
     {
         //currentState = States::Pause;
+        data->states.AddState(std::make_unique<PauseState>(data, *this), false);
     }
 
-    if(IsKeyDown(KEY_RIGHT))
+    if(IsKeyDown(KEY_RIGHT)) 
     {
         if(lateralCounter >= lateralCounterPeriod)
         {

@@ -12,8 +12,9 @@ public:
     ~GameState();
     void Init() override;
     void Input()override;
-    void Update(float dt)override;
+    void Update(float dt) override;
     void Draw() override;
+	void Resume();
 
 private:
     GameDataRef data;

@@ -12,7 +12,6 @@ Tetromino::Tetromino(const Location& loc, int size, Board& board, GameDataRef da
 
 Tetromino::~Tetromino()
 {
-	//UnloadTexture(*texture);
 }
 
 void Tetromino::Draw()

@@ -3,7 +3,7 @@
 void StateMachine::AddState(StateRef newState, bool isReplacing)
 {
 	isAdding = true;
-	isReplacing = isReplacing;
+	this->isReplacing = isReplacing;
 
 	this->newState = std::move(newState);
 }
