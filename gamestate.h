@@ -21,15 +21,15 @@ private:
     Board board;
     Tetromino mainPiece;
 	static constexpr int movePeriod = 50;
-	static constexpr int cellSize = 30;
+	static constexpr int cellSize = 32;
 	static constexpr int lateralCounterPeriod = 7;
 	int secTimer = 0;
 	int moveCounter = 0;
 	int lateralCounter = 7;
-	std::mt19937 rng{std::random_device()()};
-	std::uniform_int_distribution<int> minoDst;
 	Location offset = {};
 	float frameTime = 0;
+	std::mt19937 rng{std::random_device()()};
+	std::uniform_int_distribution<int> minoDst;
 	std::shared_ptr<Music> music;
 	std::shared_ptr<Sound> moveSound;
 	std::shared_ptr<Sound> rotateSound;

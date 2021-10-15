@@ -37,48 +37,51 @@ void GameState::Input()
 {
     offset = {};
 
-    if(IsKeyPressed(KEY_SPACE))
+    if(!board.IsDeleting())
     {
-        //currentState = States::Pause;
-        data->states.AddState(std::make_unique<PauseState>(data, *this), false);
-    }
-
-    if(IsKeyDown(KEY_RIGHT)) 
-    {
-        if(lateralCounter >= lateralCounterPeriod)
+        if(IsKeyPressed(KEY_SPACE))
         {
-            offset = {1, 0};
-            lateralCounter = 0;
+            //currentState = States::Pause;
+            data->states.AddState(std::make_unique<PauseState>(data, *this), false);
         }
-    }
-    else if(IsKeyDown(KEY_LEFT))
-    {
-        if(lateralCounter >= lateralCounterPeriod)
+
+        if(IsKeyDown(KEY_RIGHT)) 
         {
-            offset = {-1, 0};
-            lateralCounter = 0;
+            if(lateralCounter >= lateralCounterPeriod)
+            {
+                offset = {1, 0};
+                lateralCounter = 0;
+            }
         }
-    }
-
-    if(IsKeyPressed(KEY_UP))
-    {
-        if(mainPiece.Rotate())
+        else if(IsKeyDown(KEY_LEFT))
         {
-            PlaySound(*rotateSound);
+            if(lateralCounter >= lateralCounterPeriod)
+            {
+                offset = {-1, 0};
+                lateralCounter = 0;
+            }
         }
-    }
 
-    if(IsKeyDown(KEY_DOWN) && (mainPiece.GetLocation().y > 0))
-        moveCounter += 40;
-    else
-        ++moveCounter;
+        if(IsKeyPressed(KEY_UP))
+        {
+            if(mainPiece.Rotate())
+            {
+                PlaySound(*rotateSound);
+            }
+        }
 
-    ++lateralCounter;
+        if(IsKeyDown(KEY_DOWN) && (mainPiece.GetLocation().y > 0))
+            moveCounter += 40;
+        else
+            ++moveCounter;
 
-    if(moveCounter >= movePeriod)
-    {
-        moveCounter = 0;
-        offset.y = 1;
+        ++lateralCounter;
+
+        if(moveCounter >= movePeriod)
+        {
+            moveCounter = 0;
+            offset.y = 1;
+        }
     }
 }
 
@@ -90,46 +93,49 @@ void GameState::Update(float dt)
 
     board.Update();
 
-    if(offset.x != 0)
+    if(!board.IsDeleting())
     {
-        if(mainPiece.CanMoveX(offset.x))
+        if(offset.x != 0)
         {
-            PlaySound(*moveSound);
-            mainPiece.MoveBy({offset.x, 0});
+            if(mainPiece.CanMoveX(offset.x))
+            {
+                PlaySound(*moveSound);
+                mainPiece.MoveBy({offset.x, 0});
+            }
         }
-    }
 
-    if(mainPiece.CanMoveY(offset.y))
-    {
-        mainPiece.MoveBy({0, offset.y});
-    }
-    else
-    {
-        if(mainPiece.GetLocation().y > 0)
+        if(mainPiece.CanMoveY(offset.y))
         {
-            mainPiece.PutPieceOnBoard();
-
-            int delLines = board.CheckAndMarkLines();
-
-            if(delLines > 0)
-            {
-                PlaySound(*lineSound);
-                //Score::GetReference().AddScore(delLines * (10 * delLines));
-            }
-            else
-            {
-                PlaySound(*landSound);
-            }
-
-            mainPiece.Init((Tetromino::MinoType)minoDst(rng));
-
-            //currentState = States::Deleting;
+            mainPiece.MoveBy({0, offset.y});
         }
         else
         {
-            //currentState = States::GameOver;
-            data->states.AddState(std::make_unique<GameOverState>(data));
-            StopMusicStream(*music);
+            if(mainPiece.GetLocation().y > 0)
+            {
+                mainPiece.PutPieceOnBoard();
+
+                int delLines = board.CheckAndMarkLines();
+
+                if(delLines > 0)
+                {
+                    PlaySound(*lineSound);
+                    //Score::GetReference().AddScore(delLines * (10 * delLines));
+                }
+                else
+                {
+                    PlaySound(*landSound);
+                }
+
+                mainPiece.Init((Tetromino::MinoType)minoDst(rng));
+
+                //currentState = States::Deleting;
+            }
+            else
+            {
+                //currentState = States::GameOver;
+                data->states.AddState(std::make_unique<GameOverState>(data));
+                StopMusicStream(*music);
+            }
         }
     }
 }
@@ -143,7 +149,10 @@ void GameState::Draw()
     board.DrawBorders();
     board.Draw();
     //mainPiece.DrawG();
-    mainPiece.Draw();
+    if(!board.IsDeleting())
+    {
+        mainPiece.Draw();
+    }
 
     DrawText("HIGH SCORE", 420, 0, 30, RAYWHITE);
     // scoreText = std::to_string(Score::GetReference().GetHighScore());

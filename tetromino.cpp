@@ -7,7 +7,7 @@ Tetromino::Tetromino(const Location& loc, int size, Board& board, GameDataRef da
 	:
 	figure(4), loc(loc), initialLoc(loc), size(size), board(board)
 {
-	texture = data->assets.LoadAsset<Texture2D>("resources/blocks.png");
+	texture = data->assets.LoadAsset<Texture2D>("resources/blocks32x32.png");
 }
 
 Tetromino::~Tetromino()
@@ -102,11 +102,11 @@ void Tetromino::DrawNextTetromino(int x, int y, int size)
 {
 	for(int i = 0; i < 4; ++i)
 	{
-		int x1 = (figuresList[(int)nextType][i].x * size) + x;
-		int y1 = (figuresList[(int)nextType][i].y * size) + y;
-		int spriteX = ((int)nextType) * size;
+		int x1 = (figuresList[(int)nextType][i].x * this->size) + x;
+		int y1 = (figuresList[(int)nextType][i].y * this->size) + y;
+		int spriteX = ((int)nextType) * this->size;
 
-		DrawTextureRec(*texture, {(float)spriteX, 0, (float)size, (float)size}, {(float)x1, (float)y1}, WHITE);
+		DrawTextureRec(*texture, {(float)spriteX, 0, (float)this->size, (float)this->size}, {(float)x1, (float)y1}, WHITE);
 	}
 }
 

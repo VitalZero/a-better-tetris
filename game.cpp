@@ -4,18 +4,8 @@
 #include "mainscreenstate.h"
 
 Game::Game()
-	//:
-	//data(std::make_shared<GameData>()), board({0, 0}, cellSize, data), mainPiece({6, 0}, cellSize, board, data), minoDst(0, 6), currentState(States::StartScreen)
 {
 	data->states.AddState(std::make_unique<MainScreenState>(data));
-	// mainPiece.Init((Tetromino::MinoType)minoDst(rng), (Tetromino::MinoType)minoDst(rng));
-	// music = data->assets.LoadMusic("resources/tetrisbgm.mp3");
-	// //SetMusicVolume(*music, 0.8f);
-
-	// moveSound = data->assets.LoadSound("resources/move.wav");
-	// rotateSound = data->assets.LoadSound("resources/rotate.wav");
-	// landSound = data->assets.LoadSound("resources/land.wav");
-	// lineSound = data->assets.LoadSound("resources/line.wav");
 }
 
 Game::~Game()
