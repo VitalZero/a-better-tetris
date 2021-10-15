@@ -1,5 +1,6 @@
 #include "gamestate.h"
 #include "pausestate.h"
+#include "gameoverstate.h"
 #include <iostream>
 
 GameState::GameState(GameDataRef data)
@@ -15,6 +16,7 @@ GameState::~GameState()
 
 void GameState::Resume()
 {
+    std::cout << "resume" << std::endl;
 }
 
 void GameState::Init()
@@ -126,6 +128,8 @@ void GameState::Update(float dt)
         else
         {
             //currentState = States::GameOver;
+            data->states.AddState(std::make_unique<GameOverState>(data));
+            StopMusicStream(*music);
         }
     }
 }
