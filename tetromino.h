@@ -57,5 +57,5 @@ private:
 		{ {0, 0}, {-1, 0},  {1, 0},  {2, 0} }  // I
 	};
 
-	std::shared_ptr<Texture2D> texture;
+	Texture2D* texture;
 };

@@ -119,7 +119,7 @@ void GameState::Update(float dt)
                 if(delLines > 0)
                 {
                     PlaySound(*lineSound);
-                    //Score::GetReference().AddScore(delLines * (10 * delLines));
+                    data->score.AddScore(delLines * (10 * delLines));
                 }
                 else
                 {
@@ -155,11 +155,11 @@ void GameState::Draw()
     }
 
     DrawText("HIGH SCORE", 420, 0, 30, RAYWHITE);
-    // scoreText = std::to_string(Score::GetReference().GetHighScore());
-    // DrawText(scoreText.c_str(), 420, 30, 25, MAROON);
+    scoreText = std::to_string(data->score.GetHighScore());
+    DrawText(scoreText.c_str(), 420, 30, 25, MAROON);
     DrawText("Score", 420, 60, 30, RAYWHITE);
-    // scoreText = std::to_string(Score::GetReference().GetCurrentScore());
-    // DrawText(scoreText.c_str(), 420, 90, 20, GOLD);
+    scoreText = std::to_string(data->score.GetCurrentScore());
+    DrawText(scoreText.c_str(), 420, 90, 20, GOLD);
 
 
     DrawText("Next tetromino", 450, 160, 20, RAYWHITE);

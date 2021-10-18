@@ -30,10 +30,9 @@ private:
 	float frameTime = 0;
 	std::mt19937 rng{std::random_device()()};
 	std::uniform_int_distribution<int> minoDst;
-	std::shared_ptr<Music> music;
-	std::shared_ptr<Sound> moveSound;
-	std::shared_ptr<Sound> rotateSound;
-	std::shared_ptr<Sound> landSound;
-	std::shared_ptr<Sound> lineSound;
-	std::shared_ptr<Texture2D> testTexture;
+	Music* music;
+	Sound* moveSound;
+	Sound* rotateSound;
+	Sound* landSound;
+	Sound* lineSound;
 };

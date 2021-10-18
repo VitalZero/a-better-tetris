@@ -37,7 +37,7 @@ public:
 private:
 	const Location loc;
 	int grid[tileWidth * tileHeight] = {};
-	std::shared_ptr<Texture2D> texture;
+	Texture2D* texture;
 	RenderTexture2D bg;
 	int drawTimer = 0;
 	bool deleting = false;
