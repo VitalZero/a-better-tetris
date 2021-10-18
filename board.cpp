@@ -170,7 +170,7 @@ int Board::CheckAndMarkLines()
 		std::sort(linesToDelete.begin(), linesToDelete.end(), std::greater<int>{});
 	}
 
-	return deletedLines;
+	return (int)linesToDelete.size();
 }
 
 void Board::DeleteLines()
