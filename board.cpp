@@ -1,10 +1,11 @@
 #include "board.h"
 #include <cassert>
 #include "assetmanager.h"
+#include <algorithm>
 
 Board::Board(const Location& loc, int size, GameDataRef data)
 	:
-	loc({loc.x, loc.y}), tileSize(size) // increase x and y so the border is not drawn outside
+	loc({loc.x, loc.y}), tileSize(size), grid(tileWidth * tileHeight) // increase x and y so the border is not drawn outside
 {
 	texture = data->assets.LoadAsset<Texture2D>("resources/blocks32x32.png");
 
@@ -49,18 +50,25 @@ void Board::Init()
 	}
 }
 
-void Board::Update()
+void Board::Update(float dt)
 {
-	if(deleting)
-	{
-		++drawTimer;
+	frameAccumulator += dt;
 
-		if(drawTimer >= 30)
+	if(frameAccumulator >= 1.0f / 60.0f)
+	{
+		if(deleting)
 		{
-			deleting = false;
-			DeleteLines();
-			drawTimer = 0;
+			++drawTimer;
+
+			if(drawTimer >= 30)
+			{
+				deleting = false;
+				DeleteLines();
+				drawTimer = 0.0f;
+			}
 		}
+
+		frameAccumulator = 0.0f;
 	}
 }
 
@@ -143,10 +151,12 @@ int Board::CheckAndMarkLines()
 
 		if(xCounter >= 10)
 		{
-			for(int x = 1; x < tileWidth - 1; ++x)
-			{
-				SetTile(x, y, (int)BlockType::ToDelete);
-			}
+			linesToDelete.push_back(y);
+
+			// for(int x = 1; x < tileWidth - 1; ++x)
+			// {
+			// 	SetTile(x, y, (int)BlockType::ToDelete);
+			// }
 
 			++deletedLines;
 		}
@@ -155,32 +165,61 @@ int Board::CheckAndMarkLines()
 	if(deletedLines > 0)	
 		deleting = true;
 
+	if(!linesToDelete.empty())
+	{
+		std::sort(linesToDelete.begin(), linesToDelete.end(), std::greater<int>{});
+	}
+
 	return deletedLines;
 }
 
 void Board::DeleteLines()
 {
-	int y1 = tileHeight - 2;
-	for(int y = 0; y < tileHeight - 1; ++y)
+	// int y1 = tileHeight - 2;
+	// for(int y = 0; y < tileHeight - 1; ++y)
+	// {
+	// 	if(TileAt(1, y) == (int)BlockType::ToDelete)
+	// 	{
+	// 		for(int upY = y; upY >= 0; --upY)
+	// 		{
+	// 			for(int x = 1; x < tileWidth - 1; ++x)
+	// 			{
+	// 				if(upY == 0)
+	// 				{
+	// 					SetTile(x, upY, (int)BlockType::Empty);
+	// 				}
+	// 				else if(upY > 0)
+	// 				{
+	// 					SetTile(x, upY, TileAt(x, upY - 1));
+	// 				}
+	// 			}
+	// 		}
+	// 	}
+	// }
+
+	while(!linesToDelete.empty())
 	{
-		if(TileAt(1, y) == (int)BlockType::ToDelete)
+		int y = linesToDelete.back();
+
+		// go up and copy 1 cell down
+		for(int yUp = y; yUp >= 0; --yUp)
 		{
-			for(int upY = y; upY >= 0; --upY)
+			for(int x = 1; x < tileWidth - 1; ++x)
 			{
-				for(int x = 1; x < tileWidth - 1; ++x)
+				if(yUp == 0)
 				{
-					if(upY == 0)
-					{
-						SetTile(x, upY, (int)BlockType::Empty);
-					}
-					else if(upY > 0)
-					{
-						SetTile(x, upY, TileAt(x, upY - 1));
-					}
+					SetTile(x, yUp, (int)BlockType::Empty);
+				}
+				else if(yUp > 0)
+				{
+					SetTile(x, yUp, TileAt(x, yUp - 1));
 				}
 			}
 		}
+
+		linesToDelete.pop_back();
 	}
+
 }
 
 void Board::DrawBorders()

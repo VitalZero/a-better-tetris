@@ -4,6 +4,7 @@
 #include "location.h"
 #include <memory>
 #include "gamedata.h"
+#include <vector>
 
 class Board
 {
@@ -13,7 +14,7 @@ public:
 	Board(const Board&) = delete;
 	Board(const Board&&) = delete;
 	void Init();
-	void Update();
+	void Update(float dt);
 	void Draw();
 	int TileAt(int x, int y) const;
 	void SetTile(int x, int y, int value);
@@ -36,9 +37,11 @@ public:
 
 private:
 	const Location loc;
-	int grid[tileWidth * tileHeight] = {};
+	std::vector<int> grid;
+	std::vector<int> linesToDelete = {};
 	Texture2D* texture;
 	RenderTexture2D bg;
 	int drawTimer = 0;
+	float frameAccumulator = 0.0f;
 	bool deleting = false;
 };

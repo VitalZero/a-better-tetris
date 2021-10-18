@@ -3,7 +3,6 @@
 #include <unordered_map>
 #include <string>
 #include <memory>
-#include "wrappers.h"
 #include <typeinfo>
 
 class AssetManager
@@ -16,7 +15,6 @@ public:
 		return nullptr;
 	}
 	void CleanUp();
-	void MurderOrphans();
 
 private:
 	std::unordered_map<std::string, Texture2D> texturePtrs;

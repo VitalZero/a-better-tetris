@@ -6,6 +6,7 @@
 #include <random>
 #include <memory>
 #include "gamedata.h"
+#include <array>
 
 using Figure = std::vector<Vector2>;
 
@@ -46,16 +47,16 @@ private:
 	MinoType currentType = MinoType::None;
 	MinoType nextType = MinoType::None;
 	bool landed = false;
-	static constexpr Vector2 figuresList[7][4]= 
-	{
-		{ {0, 0}, {1, 0},  {-1, 1},  {0, 1} }, // S
-		{ {0, 0}, {-1, 0},  {1, 0}, {0, 1} }, // T
-		{ {0, 0},  {1, 0},  {0, 1},  {1, 1} }, // O
-		{ {0, 0}, {-1, 0},  {1, 0},  {-1, 1} }, // L
-		{ {0, 0}, {-1, 0},  {1, 0},  {1, 1} }, // J
-		{ {0, 0}, {-1, 0}, {0, 1},  {1, 1} },// Z
-		{ {0, 0}, {-1, 0},  {1, 0},  {2, 0} }  // I
-	};
+	const std::vector<std::vector<Vector2>> figuresList 
+	{{
+		{{ {0, 0}, {1, 0},  {-1, 1},  {0, 1} }}, // S
+		{{ {0, 0}, {-1, 0},  {1, 0}, {0, 1} }}, // T
+		{{ {0, 0},  {1, 0},  {0, 1},  {1, 1} }}, // O
+		{{ {0, 0}, {-1, 0},  {1, 0},  {-1, 1} }}, // L
+		{{ {0, 0}, {-1, 0},  {1, 0},  {1, 1} }}, // J
+		{{ {0, 0}, {-1, 0}, {0, 1},  {1, 1} }},// Z
+		{{ {0, 0}, {-1, 0},  {1, 0},  {2, 0} }}  // I
+	}};
 
 	Texture2D* texture;
 };

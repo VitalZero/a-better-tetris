@@ -91,7 +91,7 @@ void GameState::Update(float dt)
 
     UpdateMusicStream(*music);
 
-    board.Update();
+    board.Update(dt);
 
     if(!board.IsDeleting())
     {
