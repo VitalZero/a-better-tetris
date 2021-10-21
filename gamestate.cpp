@@ -106,7 +106,6 @@ void GameState::Update(float dt)
 
         if(mainPiece.CanMoveY(offset.y))
         {
-        mainPiece.GetNearestBottomCollision();
             mainPiece.MoveBy({0, offset.y});
         }
         else
@@ -138,6 +137,7 @@ void GameState::Update(float dt)
                 StopMusicStream(*music);
             }
         }
+        mainPiece.GetNearestBottomCollision();
     }
 }
 

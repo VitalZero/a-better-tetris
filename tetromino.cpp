@@ -38,7 +38,7 @@ void Tetromino::DrawGuide()
 		int x = f.x + loc.x + brdLoc.x;
 		int y = brdLoc.y + nearestBottomCollision + f.y;
 		int spriteX = (int)currentType * size;
-		DrawRectangleLinesEx({(float)x * size, (float)y * size, (float)size, (float)size}, 2, MAROON);
+		DrawRectangleLinesEx({(float)x * size + 1, (float)y * size + 1, (float)size - 1, (float)size - 1}, 2, MAROON);
 		//DrawTextureRec(*texture, {(float)spriteX, 0, (float)size, (float)size}, {(float)x1 * size, (float)(yOffset + y1) * size}, Fade(WHITE, 0.3f));
 	}
 
