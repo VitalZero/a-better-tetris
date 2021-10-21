@@ -1,4 +1,4 @@
-#include "statemanager.h"
+#include "statemachine.h"
 
 void StateMachine::AddState(StateRef newState, bool isReplacing)
 {

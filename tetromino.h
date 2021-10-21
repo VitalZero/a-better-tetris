@@ -21,7 +21,7 @@ public:
 	Tetromino(const Tetromino&) = delete;
 	Tetromino(const Tetromino&&) = delete;
 	void Draw();
-	//void DrawG();
+	void DrawGuide();
 	void Init(MinoType in_next, MinoType incurrent = MinoType::None);
 	bool Rotate();
 	void MoveBy(const Location& in_loc);
@@ -31,6 +31,7 @@ public:
 	bool CheckCollision();
 	bool CanMoveX(int dx) const;
 	bool CanMoveY(int dy) const;
+	void GetNearestBottomCollision();
 
 private:
 	void RotateRight();
@@ -41,6 +42,7 @@ private:
 	Location loc;
 	const Location initialLoc;
 	int size;
+	int nearestBottomCollision = -1;
 	Color color;
 	Figure figure;
 	Board& board;

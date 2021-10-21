@@ -91,15 +91,20 @@ void Board::Draw()
 			{
 				DrawTextureRec(*texture, {(float)spriteX, 0, (float)tileSize, (float)tileSize}, {(float)x1, (float)y1}, WHITE);
 			}
-			else if(tileValue == (int)BlockType::ToDelete)
+			
+			if(deleting)
 			{
 				Color c;
 				if(drawTimer % 12 < 6)
-					c = RAYWHITE;
+					c = Fade(RAYWHITE, 0.5f);
 				else
-					c = MAROON;
+					c = Fade(MAROON, 0.5f);
 
-				DrawRectangle(x1, y1, tileSize, tileSize, c);
+				for(const auto& b : linesToDelete)
+				{
+					if(x > 0 && x < tileWidth - 1)
+						DrawRectangle(x1, b * tileSize, tileSize, tileSize, c);
+				}
 			}
 			// else if(tileValue == (int)BlockType::Wall)	// dont draw the wall at the moment
 			// {

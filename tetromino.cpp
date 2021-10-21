@@ -28,22 +28,21 @@ void Tetromino::Draw()
 	}
 }
 
-// void Tetromino::DrawG()
-// {
-// 	Location brdLoc = board.GetLocation();
+void Tetromino::DrawGuide()
+{
+	Location brdLoc = board.GetLocation();
 
-// 	int yOffset = DrawGhost();
+	for(const auto& f : figure)
+	{
 
-// 	for(const auto& f : figure)
-// 	{
-// 		int x1 = f.x + loc.x + brdLoc.x;
-// 		int y1 = f.y + loc.y + brdLoc.y;
-// 		int spriteX = (int)currentType * size;
-// 		//DrawRectangleLinesEx({(float)x1 * size + 1, (float)(yOffset + y1) * size + 1, (float)size - 1, (float)size - 1}, 1, Fade(MAROON, 0.5f));
-// 		DrawTextureRec(*texture, {(float)spriteX, 0, (float)size, (float)size}, {(float)x1 * size, (float)(yOffset + y1) * size}, Fade(WHITE, 0.3f));
-// 	}
+		int x = f.x + loc.x + brdLoc.x;
+		int y = brdLoc.y + nearestBottomCollision + f.y;
+		int spriteX = (int)currentType * size;
+		DrawRectangleLinesEx({(float)x * size, (float)y * size, (float)size, (float)size}, 2, MAROON);
+		//DrawTextureRec(*texture, {(float)spriteX, 0, (float)size, (float)size}, {(float)x1 * size, (float)(yOffset + y1) * size}, Fade(WHITE, 0.3f));
+	}
 
-// }
+}
 
 void Tetromino::Init(MinoType in_next, MinoType in_current)
 {
@@ -205,6 +204,24 @@ int Tetromino::PutPieceOnBoard()
 	}
 
 	return 0;
+}
+
+void Tetromino::GetNearestBottomCollision()
+{
+	for(int y = loc.y; y < board.tileHeight - 1; ++y)
+	{
+		for(const auto& b : figure)
+		{
+			int dy = y + b.y;
+			int dx = b.x + loc.x;
+
+			if(board.TileAt(dx, dy + 1) > (int)Board::BlockType::Empty)
+			{
+				nearestBottomCollision = y; //dy - loc.y - 1;
+				return;
+			}
+		}
+	}
 }
 
 // int Tetromino::DrawGhost()
