@@ -26,7 +26,7 @@ public:
 	
 public:
 	static constexpr int tileWidth = 12;
-	static constexpr int tileHeight = 20;
+	static constexpr int tileHeight = 21;
 	const int tileSize;
 	static constexpr Color TetrominoColors[7] = 
 	{ BLUE, GREEN, RED, YELLOW, ORANGE, GRAY, PURPLE };
@@ -44,4 +44,6 @@ private:
 	int drawTimer = 0;
 	float frameAccumulator = 0.0f;
 	bool deleting = false;
+	Texture2D* flareTexture;
+	GameDataRef data;
 };

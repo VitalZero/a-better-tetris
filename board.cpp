@@ -5,36 +5,9 @@
 
 Board::Board(const Location& loc, int size, GameDataRef data)
 	:
-	loc({loc.x, loc.y}), tileSize(size), grid(tileWidth * tileHeight) // increase x and y so the border is not drawn outside
+	loc({loc.x, loc.y}), tileSize(size), grid(tileWidth * tileHeight), data(data) // increase x and y so the border is not drawn outside
 {
-	texture = data->assets.LoadAsset<Texture2D>("resources/blocks32x32.png");
-
-	bg = LoadRenderTexture(tileWidth * tileSize, tileHeight * tileSize);
-
-	BeginTextureMode(bg);
-	ClearBackground(Fade(LIGHTGRAY, 0.0f));
-
-	for(int y = 0; y < tileHeight - 1; ++y)
-	{
-		for(int x = 1; x < tileWidth - 1; ++	x)
-		{
-			DrawTextureRec(*texture, {(float)tileSize * 7, 0, (float)tileSize, (float)tileSize}, {(float)x * tileSize, (float)y * tileSize}, Fade(WHITE, 1.0f));
-		}
-	}
-
-	EndTextureMode();
-
-	Init();
-}
-
-Board::~Board()
-{
-	UnloadRenderTexture(bg);
-}
-
-void Board::Init()
-{
-	for(int y = 0; y < tileHeight; ++y)
+		for(int y = 0; y < tileHeight; ++y)
 	{
 		for(int x = 0; x < tileWidth; ++x)
 		{
@@ -48,6 +21,34 @@ void Board::Init()
 			}
 		}
 	}
+
+	Init();
+}
+
+Board::~Board()
+{
+	UnloadRenderTexture(bg);
+}
+
+void Board::Init()
+{
+	texture = data->assets.LoadAsset<Texture2D>("resources/blocks32x32.png");
+	flareTexture = data->assets.LoadAsset<Texture2D>("resources/particle.png");
+
+	bg = LoadRenderTexture(tileWidth * tileSize, tileHeight * tileSize);
+
+	BeginTextureMode(bg);
+	ClearBackground(Fade(BLACK, 0.0f));
+
+	for(int y = 0; y < tileHeight - 1; ++y)
+	{
+		for(int x = 1; x < tileWidth - 1; ++	x)
+		{
+			DrawTextureRec(*texture, {(float)tileSize * 7, 0, (float)tileSize, (float)tileSize}, {(float)x * tileSize, (float)y * tileSize}, Fade(WHITE, 1.0f));
+		}
+	}
+
+	EndTextureMode();
 }
 
 void Board::Update(float dt)
@@ -235,6 +236,8 @@ void Board::DeleteLines()
 
 void Board::DrawBorders()
 {
-	DrawTextureRec(bg.texture, { 0, 0, (float)bg.texture.width, (float)-bg.texture.height},
-		{ (float)loc.x * tileSize, (float)loc.y * tileSize }, WHITE);
+	// DrawTextureRec(bg.texture, { 0, 0, (float)bg.texture.width, (float)-bg.texture.height},
+	// 	{ (float)loc.x * tileSize, (float)loc.y * tileSize }, WHITE);
+
+	DrawRectangleGradientV(loc.x + tileSize, loc.y, (tileWidth - 2) * tileSize, (tileHeight - 1) * tileSize, Fade(BLACK, 0.0f), Fade(BLACK, 0.5f));
 }

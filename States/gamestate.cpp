@@ -31,6 +31,7 @@ void GameState::Init()
 	rotateSound = data->assets.LoadAsset<Sound>("resources/rotate.wav");
 	landSound = data->assets.LoadAsset<Sound>("resources/land.wav");
 	lineSound = data->assets.LoadAsset<Sound>("resources/line.wav");
+    background = data->assets.LoadAsset<Texture2D>("resources/bg.png");
 }
 
 void GameState::Input()
@@ -147,6 +148,8 @@ void GameState::Draw()
 	std::string text;
 	int textLenPixels = 0;
 
+    DrawTexture(*background, 0, 0, WHITE);
+
     board.DrawBorders();
     board.Draw();
     //mainPiece.DrawG();
@@ -156,17 +159,20 @@ void GameState::Draw()
         mainPiece.Draw();
     }
 
-    DrawText("HIGH SCORE", 420, 0, 30, RAYWHITE);
+    DrawText("HIGH SCORE", 420, 0, 30, BLACK);
     scoreText = std::to_string(data->score.GetHighScore());
+    DrawText(scoreText.c_str(), 421, 31, 25, GRAY);
     DrawText(scoreText.c_str(), 420, 30, 25, MAROON);
-    DrawText("Score", 420, 60, 30, RAYWHITE);
+    
+    DrawText("Score", 420, 60, 30, BLACK);
     scoreText = std::to_string(data->score.GetCurrentScore());
+    DrawText(scoreText.c_str(), 421, 91, 20, GRAY);
     DrawText(scoreText.c_str(), 420, 90, 20, GOLD);
 
 
-    DrawText("Next tetromino", 450, 160, 20, RAYWHITE);
+    DrawText("Next tetromino", 450, 160, 20, BLACK);
     mainPiece.DrawNextTetromino(500, 190, 30);
 
     DrawFPS(GetScreenWidth() - 80, GetScreenHeight() - 30);
-    DrawText("VitalZero's Petris - VZ Studio 2021.", 10, GetScreenHeight() - 30, 20, RAYWHITE);
+    DrawText("VitalZero's Petris - VZ Studio 2021.", 10, GetScreenHeight() - 30, 20, BLACK);
 }

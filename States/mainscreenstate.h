@@ -1,14 +1,12 @@
 #pragma once
 #include "Istate.h"
-#include "gamedata.h"
+#include "../gamedata.h"
 
-class GameState;
-
-class PauseState : public IState
+class MainScreenState : public IState
 {
 public:
-    PauseState(GameDataRef data, GameState& gameState);
-    ~PauseState();
+    MainScreenState(GameDataRef data);
+    ~MainScreenState();
     void Init() override;
     void Input() override;
     void Update(float dt) override;
@@ -16,5 +14,4 @@ public:
 
 private:
     GameDataRef data;
-    GameState& gameState;
 };

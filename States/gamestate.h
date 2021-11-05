@@ -1,8 +1,8 @@
 #pragma once
 #include "Istate.h"
-#include "gamedata.h"
-#include "tetromino.h"
-#include "board.h"
+#include "../gamedata.h"
+#include "../tetromino.h"
+#include "../board.h"
 #include "raylib.h"
 
 class GameState : public IState
@@ -35,4 +35,5 @@ private:
 	Sound* rotateSound;
 	Sound* landSound;
 	Sound* lineSound;
+	Texture2D* background;
 };

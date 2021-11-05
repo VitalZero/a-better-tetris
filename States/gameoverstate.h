@@ -1,12 +1,12 @@
 #pragma once
 #include "Istate.h"
-#include "gamedata.h"
+#include "../gamedata.h"
 
-class MainScreenState : public IState
+class GameOverState : public IState
 {
 public:
-    MainScreenState(GameDataRef data);
-    ~MainScreenState();
+    GameOverState(GameDataRef data);
+    ~GameOverState();
     void Init() override;
     void Input() override;
     void Update(float dt) override;
