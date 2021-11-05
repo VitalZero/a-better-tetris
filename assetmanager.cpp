@@ -17,3 +17,5 @@ void AssetManager::CleanUp()
 		UnloadMusicStream(msc.second);
 	}
 }
+
+bool AssetManager::instantiaded = false; // to asure a single instance

@@ -4,10 +4,18 @@
 #include <string>
 #include <memory>
 #include <typeinfo>
+#include <cassert>
 
 class AssetManager
 {
 public:
+	AssetManager()
+	{
+		// to asure a single instance
+		assert(!instantiaded);
+		instantiaded = true;
+	}
+
 	template<typename T>
 	T* LoadAsset(const std::string& resource)
 	{
@@ -20,6 +28,7 @@ private:
 	std::unordered_map<std::string, Texture2D> texturePtrs;
 	std::unordered_map<std::string, Sound> soundPtrs;
 	std::unordered_map<std::string, Music> musicPtrs;
+	static bool instantiaded; 
 };
 
 template<>
