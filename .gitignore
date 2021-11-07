@@ -19,3 +19,13 @@ States/pausestate.obj
 States/statemachine.obj
 States/tetromino.obj
 States/vc140.pdb
+States/board.obj
+States/game.obj
+States/gameoverstate.obj
+States/gamestate.obj
+States/location.obj
+States/main.obj
+States/mainscreenstate.obj
+States/pausestate.obj
+States/statemachine.obj
+States/tetromino.obj
