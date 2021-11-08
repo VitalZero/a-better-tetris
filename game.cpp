@@ -1,7 +1,7 @@
 #include "game.h"
 #include "assetmanager.h"
 #include "score.h"
-#include "States/mainscreenstate.h"
+#include "Scenes/mainscreenstate.h"
 
 Game::Game()
 {

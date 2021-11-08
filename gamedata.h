@@ -1,6 +1,6 @@
 #pragma once
 #include "assetmanager.h"
-#include "States/statemachine.h"
+#include "Scenes/statemachine.h"
 #include "score.h"
 
 struct GameData

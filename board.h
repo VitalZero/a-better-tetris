@@ -5,9 +5,12 @@
 #include <memory>
 #include "gamedata.h"
 #include <vector>
+#include "ObjectStates/ObjectStateManager.h"
+#include "BoardPlayingState.h"
 
 class Board
 {
+friend class BoardPlayingState;
 public:
 	Board(const Location& loc, int size, GameDataRef data);
 	~Board();
@@ -46,4 +49,6 @@ private:
 	bool deleting = false;
 	Texture2D* flareTexture;
 	GameDataRef data;
+	std::unique_ptr<ObjectStateManager<Board>> objectStates;
+	BoardPlayingState playingState;
 };
