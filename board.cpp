@@ -7,8 +7,6 @@ Board::Board(const Location& loc, int size, GameDataRef data)
 	:
 	loc({loc.x, loc.y}), tileSize(size), grid(tileWidth * tileHeight), data(data) // increase x and y so the border is not drawn outside
 {
-	objectStates = std::make_unique<ObjectStateManager<Board>>(this);
-	objectStates->SetCurrentState(&playingState);
 
 	// for(int y = 0; y < owner->tileHeight; ++y)
 	// {
@@ -25,7 +23,7 @@ Board::Board(const Location& loc, int size, GameDataRef data)
 	// 	}
 	// }
 
-	// owner->Init();
+	Init();
 }
 
 Board::~Board()
@@ -52,78 +50,91 @@ void Board::Init()
 	}
 
 	EndTextureMode();
+
+	for(int y = 0; y < tileHeight; ++y)
+	{
+		for(int x = 0; x < tileWidth; ++x)
+		{
+			if(x == 0 || x == tileWidth - 1 || y == tileHeight - 1)
+			{
+				grid[y * tileWidth + x] = (int)BlockType::Wall;
+			}
+			else
+			{
+				grid[y * tileWidth + x] = (int)BlockType::Empty;
+			}
+		}
+	}
 }
 
 void Board::Update(float dt)
 {
-	objectStates->CurrentState()->Update(this, dt);
-	// frameAccumulator += dt;
+	frameAccumulator += dt;
 
-	// if(frameAccumulator >= 1.0f / 60.0f)
-	// {
-	// 	if(deleting)
-	// 	{
-	// 		++drawTimer;
+	if(frameAccumulator >= 1.0f / 60.0f)
+	{
+		if(deleting)
+		{
+			++drawTimer;
 
-	// 		if(drawTimer >= 40)
-	// 		{
-	// 			deleting = false;
-	// 			DeleteLines();
-	// 			drawTimer = 0.0f;
-	// 		}
-	// 	}
+			if(drawTimer >= 40)
+			{
+				deleting = false;
+				DeleteLines();
+				drawTimer = 0.0f;
+			}
+		}
 
-	// 	frameAccumulator = 0.0f;
-	// }
+		frameAccumulator = 0.0f;
+	}
 }
 
 void Board::Draw()
 {
-	objectStates->CurrentState()->Draw(this);
-// 	for(int y = 0; y < tileHeight; ++y)
-// 	{
-// 		for(int x = 0; x < tileWidth; ++x)
-// 		{
-// 			int x1 = (x * tileSize) + (loc.x * tileSize);
-// 			int y1 = (y * tileSize) + (loc.y * tileSize);
+	for(int y = 0; y < tileHeight; ++y)
+	{
+		for(int x = 0; x < tileWidth; ++x)
+		{
+			int x1 = (x * tileSize) + (loc.x * tileSize);
+			int y1 = (y * tileSize) + (loc.y * tileSize);
 
-// 			int size = tileSize;
+			int size = tileSize;
 
-// 			int tileValue = TileAt(x, y);
-// 			assert(tileValue < 7 || tileValue == (int)BlockType::Wall);
-// 			int spriteX = (tileValue) * tileSize;
+			int tileValue = TileAt(x, y);
+			assert(tileValue < 7 || tileValue == (int)BlockType::Wall);
+			int spriteX = (tileValue) * tileSize;
 
-// 			if(tileValue > (int)BlockType::Empty && tileValue != (int)BlockType::Wall)
-// 			{
-// 				DrawTextureRec(*texture, {(float)spriteX, 0, (float)tileSize, (float)tileSize}, {(float)x1, (float)y1}, WHITE);
-// 			}
+			if(tileValue > (int)BlockType::Empty && tileValue != (int)BlockType::Wall)
+			{
+				DrawTextureRec(*texture, {(float)spriteX, 0, (float)tileSize, (float)tileSize}, {(float)x1, (float)y1}, WHITE);
+			}
 			
-// 			// else if(tileValue == (int)BlockType::Wall)	// dont draw the wall at the moment
-// 			// {
-// 			// 	DrawRectangle(x1, y1, tileSize, tileSize, DARKGRAY);
-// 			// }
-// 		}
-// 	}
+			// else if(tileValue == (int)BlockType::Wall)	// dont draw the wall at the moment
+			// {
+			// 	DrawRectangle(x1, y1, tileSize, tileSize, DARKGRAY);
+			// }
+		}
+	}
 
-// 	if(deleting)
-// 	{
-// 		Color c;
-// 		if(drawTimer % 10 < 5)
-// 			c = Fade(RAYWHITE, 0.5f);
-// 		else
-// 			c = Fade(MAROON, 0.5f);
+	if(deleting)
+	{
+		Color c;
+		if(drawTimer % 10 < 5)
+			c = Fade(RAYWHITE, 0.5f);
+		else
+			c = Fade(MAROON, 0.5f);
 
-// 		for(const auto& b : linesToDelete)
-// 		{
-// 			for(int x = 1; x < tileWidth - 1; ++x)
-// 			{
-// 				int x1 = (x * tileSize) + (loc.x * tileSize);
-// 				int y1 = (b * tileSize) + (loc.y * tileSize);
-// 			//if(x > 0 && x < tileWidth - 1)
-// 				DrawRectangle(x1, y1, tileSize, tileSize, c);
-// 			}
-// 		}
-// 	}
+		for(const auto& b : linesToDelete)
+		{
+			for(int x = 1; x < tileWidth - 1; ++x)
+			{
+				int x1 = (x * tileSize) + (loc.x * tileSize);
+				int y1 = (b * tileSize) + (loc.y * tileSize);
+			//if(x > 0 && x < tileWidth - 1)
+				DrawRectangle(x1, y1, tileSize, tileSize, c);
+			}
+		}
+	}
 }
 
 int Board::TileAt(int x, int y) const
